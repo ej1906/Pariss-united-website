@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Pariss United LLC</title>
+
+    <meta name="description" content="Contact Pariss United LLC to schedule your free AI strategy session. Let's discuss how we can implement AI-powered solutions to grow your business.">
+    <meta name="keywords" content="contact AI consulting, AI business strategy, schedule consultation, Pariss United LLC">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #E0E0E0;
+        }
+
+        .tech-pattern-bg {
+            background-color: #000814;
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(0, 119, 204, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 75% 75%, rgba(0, 51, 102, 0.1) 0%, transparent 40%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-pattern-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-image:
+                linear-gradient(45deg, rgba(0, 51, 102, 0.5) 1px, transparent 1px),
+                linear-gradient(-45deg, rgba(0, 51, 102, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: movePattern 20s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes movePattern {
+            from { transform: translate(0, 0); }
+            to { transform: translate(-50%, -50%); }
+        }
+
+        .header-fade-in {
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-width: 1px;
+            border-color: #4b5563; /* Darker border for contact page */
+            background-color: #0c1b31; /* Darker background */
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            color: #E0E0E0 !important;
+        }
+
+        .form-input:focus {
+            --tw-ring-color: #3b82f6;
+            border-color: #3b82f6;
+            background-color: #000814;
+            outline: none;
+            box-shadow: 0 0 0 2px var(--tw-ring-color);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+        
+        input:-webkit-autofill,
+        textarea:-webkit-autofill {
+            -webkit-text-fill-color: #E0E0E0 !important;
+            -webkit-box-shadow: 0 0 0px 1000px #0c1b31 inset;
+        }
+
+        .form-input.invalid {
+            border-color: #ef4444;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            transition: all 300ms;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+             animation: fadeIn 0.5s ease-in-out;
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-lg border-b border-white/10 header-fade-in">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <a href="index.html" class="text-2xl font-bold text-white">PARISS UNITED <span class="text-[#0099ff]">LLC</span></a>
+                    <p class="text-xs text-gray-400">AI-Powered Business Solutions</p>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html#services" class="text-gray-300 hover:text-white transition">Services</a>
+                    <a href="index.html#about" class="text-gray-300 hover:text-white transition">About</a>
+                    <a href="contact.html" class="text-white font-bold transition">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="tech-pattern-bg pt-32 pb-20">
+        <div class="container mx-auto max-w-4xl px-4 relative z-10">
+
+            <div class="text-center mb-12">
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-white">Let's Build Your Future</h1>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Have a question or ready to start your AI transformation? Fill out the form below, and our team will contact you within 24 business hours.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-10">
+
+                <div class="md:col-span-3 bg-[#000814]/80 border border-[#003366] rounded-lg p-8 shadow-2xl">
+                    <div id="contact-container">
+                        <form id="contact-form" novalidate>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="fullName" class="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
+                                    <input type="text" id="fullName" class="form-input" required>
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address *</label>
+                                    <input type="email" id="email" class="form-input" required>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <label for="subject" class="block text-sm font-medium text-gray-300 mb-2">Subject *</label>
+                                <input type="text" id="subject" class="form-input" required>
+                            </div>
+                            <div class="mt-6">
+                                <label for="message" class="block text-sm font-medium text-gray-300 mb-2">How can we help you? *</label>
+                                <textarea id="message" rows="5" class="form-input" required></textarea>
+                            </div>
+                            <div class="mt-2 text-center">
+                                <p id="form-error-msg" class="text-red-500 text-sm" style="display: none;">Please fill out all required fields.</p>
+                            </div>
+                            <div class="mt-8 text-center">
+                                <button type="submit" id="submit-btn" class="btn btn-primary text-lg w-full sm:w-auto">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div id="thank-you-message" class="text-center py-12 hidden">
+                        <svg class="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <h2 class="mt-4 text-3xl font-extrabold text-white">Thank You!</h2>
+                        <p class="mt-2 text-gray-300">Your message has been sent successfully. Our team will get back to you shortly.</p>
+                    </div>
+
+                </div>
+
+                <div class="md:col-span-2 space-y-6">
+                    <div class="bg-[#000814]/80 border border-[#003366] rounded-lg p-6">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <svg class="w-6 h-6 mr-3 text-[#0099ff]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                            Email Us
+                        </h3>
+                        <p class="text-gray-400 mt-2">The best way to reach us.</p>
+                        <a href="mailto:info@parissunited.com" class="text-[#0099ff] hover:underline break-words">info@parissunited.com</a>
+                    </div>
+                     <div class="bg-[#000814]/80 border border-[#003366] rounded-lg p-6">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                           <svg class="w-6 h-6 mr-3 text-[#0099ff]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Office Hours
+                        </h3>
+                        <p class="text-gray-400 mt-2">Monday - Friday<br>9:00 AM - 5:00 PM (CST)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-[#000814] border-t border-[#003366]">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p class="mb-2">&copy; 2025 Pariss United LLC. All Rights Reserved.</p>
+            <p>Email: <a href="mailto:info@parissunited.com" class="text-[#0099ff] hover:underline">info@parissunited.com</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                const thankYouMessage = document.getElementById('thank-you-message');
+                const contactContainer = document.getElementById('contact-container');
+                const errorMsg = document.getElementById('form-error-msg');
+                
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault(); 
+
+                    let isValid = true;
+                    const requiredFields = contactForm.querySelectorAll('[required]');
+                    
+                    requiredFields.forEach(field => {
+                        if (!field.value.trim()) {
+                            isValid = false;
+                            field.classList.add('invalid');
+                        } else {
+                            field.classList.remove('invalid');
+                        }
+                    });
+
+                    if (isValid) {
+                        errorMsg.style.display = 'none';
+                        // In a real application, you would send data to a server here.
+                        // We are simulating success for this example.
+                        console.log('Form is valid and would be submitted.');
+                        contactContainer.classList.add('hidden');
+                        thankYouMessage.classList.remove('hidden');
+                        thankYouMessage.classList.add('fade-in');
+                    } else {
+                        errorMsg.style.display = 'block';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
