@@ -146,7 +146,7 @@
 
             <div class="text-center mb-12">
                 <h1 class="text-4xl sm:text-5xl font-extrabold text-white">Let's Build Your Future</h1>
-                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Have a question or ready to start your AI transformation? Fill out the form below, and our team will contact you within 24 business hours.</p>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Have a question or ready to start your AI transformation? Fill out the form below, and our team will contact you within 24 business hours to schedule your free, no-obligation strategy session.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-5 gap-10">
@@ -181,79 +181,4 @@
                         </form>
                     </div>
                     
-                    <div id="thank-you-message" class="text-center py-12 hidden">
-                        <svg class="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <h2 class="mt-4 text-3xl font-extrabold text-white">Thank You!</h2>
-                        <p class="mt-2 text-gray-300">Your message has been sent successfully. Our team will get back to you shortly.</p>
-                    </div>
-
-                </div>
-
-                <div class="md:col-span-2 space-y-6">
-                    <div class="bg-[#000814]/80 border border-[#003366] rounded-lg p-6">
-                        <h3 class="text-xl font-bold text-white flex items-center">
-                            <svg class="w-6 h-6 mr-3 text-[#0099ff]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
-                            Email Us
-                        </h3>
-                        <p class="text-gray-400 mt-2">The best way to reach us.</p>
-                        <a href="mailto:info@parissunited.com" class="text-[#0099ff] hover:underline break-words">info@parissunited.com</a>
-                    </div>
-                     <div class="bg-[#000814]/80 border border-[#003366] rounded-lg p-6">
-                        <h3 class="text-xl font-bold text-white flex items-center">
-                           <svg class="w-6 h-6 mr-3 text-[#0099ff]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            Office Hours
-                        </h3>
-                        <p class="text-gray-400 mt-2">Monday - Friday<br>9:00 AM - 5:00 PM (CST)</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="bg-[#000814] border-t border-[#003366]">
-        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
-            <p class="mb-2">&copy; 2025 Pariss United LLC. All Rights Reserved.</p>
-            <p>Email: <a href="mailto:info@parissunited.com" class="text-[#0099ff] hover:underline">info@parissunited.com</a></p>
-        </div>
-    </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const contactForm = document.getElementById('contact-form');
-            if (contactForm) {
-                const thankYouMessage = document.getElementById('thank-you-message');
-                const contactContainer = document.getElementById('contact-container');
-                const errorMsg = document.getElementById('form-error-msg');
-                
-                contactForm.addEventListener('submit', (e) => {
-                    e.preventDefault(); 
-
-                    let isValid = true;
-                    const requiredFields = contactForm.querySelectorAll('[required]');
-                    
-                    requiredFields.forEach(field => {
-                        if (!field.value.trim()) {
-                            isValid = false;
-                            field.classList.add('invalid');
-                        } else {
-                            field.classList.remove('invalid');
-                        }
-                    });
-
-                    if (isValid) {
-                        errorMsg.style.display = 'none';
-                        // In a real application, you would send data to a server here.
-                        // We are simulating success for this example.
-                        console.log('Form is valid and would be submitted.');
-                        contactContainer.classList.add('hidden');
-                        thankYouMessage.classList.remove('hidden');
-                        thankYouMessage.classList.add('fade-in');
-                    } else {
-                        errorMsg.style.display = 'block';
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+                    <div id="thank-you-message" class="text-center py-12 hidden
