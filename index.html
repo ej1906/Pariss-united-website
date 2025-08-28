@@ -115,7 +115,6 @@
 
         /* AI Evaluation App Styles */
         #ai-app-section {
-            /* DEVELOPER NOTE: Make sure this image exists at this path */
             background: linear-gradient(rgba(0, 8, 20, 0.85), rgba(0, 31, 63, 0.85)), url('images/ai-hero-background.jpg');
             background-size: cover;
             background-position: center;
@@ -250,13 +249,142 @@
             left: -6px;
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
-            border-bottom: 8px solid #111827;
-            transform: translate(-50%, -8px);
+            border-top: 8px solid #111827;
+        }
+
+        #score-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #4b5563;
+            padding: 0 5px;
+        }
+
+        /* --- AI Chatbot Styles --- */
+        #chatbot-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        #chatbot-toggle {
+            background-color: #0077cc;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 119, 204, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        #chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        #chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            max-width: 90vw;
+            height: 500px;
+            background-color: #000814;
+            border: 1px solid #003366;
+            border-radius: 1rem;
+            overflow: visible; /* Allow image to pop out */
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        #chat-window.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #chat-header {
+            background-color: #001f3f;
+            text-align: center;
+            position: relative;
+            flex-shrink: 0;
+            padding-top: 70px; /* Make space for the larger image */
+            padding-bottom: 1rem;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        #chat-header-image-container {
+            position: absolute;
+            top: -70px; /* Pull the larger image up */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #chat-header-image {
+            width: 140px; /* Larger image */
+            height: 140px; /* Larger image */
+            border-radius: 50%;
+            border: 4px solid #005f99;
+            display: block;
+            object-fit: cover;
+        }
+
+        #chat-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .chat-message {
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            background-color: #003366;
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        .user-message {
+            background-color: #e0e0e0;
+            color: #111;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        #chat-input-container {
+            padding: 1rem;
+            border-top: 1px solid #003366;
+        }
+
+        #chat-input {
+            width: 100%;
+            background-color: #001f3f;
+            border: 1px solid #005f99;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            outline: none;
         }
     </style>
 </head>
 <body class="antialiased">
-
     <header class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-lg border-b border-white/10 header-fade-in">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
@@ -265,153 +393,667 @@
                     <p class="text-xs text-gray-400">AI-Powered Business Solutions</p>
                 </div>
                 <nav class="hidden md:flex space-x-8">
-                    <a href="#services" class="text-gray-300 hover:text-white transition">Services</a>
-                    <a href="#about" class="text-gray-300 hover:text-white transition">About</a>
-                    <a href="contact.html" class="text-gray-300 hover:text-white transition">Contact</a>
+                    <a href="index.html#services" class="text-gray-300 hover:text-white transition">Services</a>
+                    <a href="index.html#about" class="text-gray-300 hover:text-white transition">About</a>
+                    <a href="contact.html?v=3" class="text-gray-300 hover:text-white transition">Contact</a>
                 </nav>
             </div>
         </div>
     </header>
 
     <main>
+        <section id="ai-app-section" class="pt-32 pb-20">
+            <div class="container mx-auto max-w-4xl px-4">
+                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
 
-        <section id="ai-app-section" class="py-20 pt-40">
-            <div class="container mx-auto max-w-2xl px-4 text-center">
-                <div class="bg-black/70 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/10">
-                    <form id="ai-evaluation-form" novalidate>
-                        <div class="w-full bg-gray-700 rounded-full h-2.5 mb-6">
-                            <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full progress-bar-fill" style="width: 0%"></div>
-                        </div>
+                    <div id="progress-bar-container" class="w-full bg-gray-200 rounded-t-2xl" style="display: none;">
+                        <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-tl-2xl progress-bar-fill" style="width: 0%">0%</div>
+                    </div>
 
-                        <div class="step active" data-step="1">
-                            <h1 class="text-4xl sm:text-5xl font-extrabold text-white">Is Your Business Ready for the AI Revolution?</h1>
-                            <p class="text-gray-300 mt-4">In the next 60 seconds, discover your business's AI score and get a FREE, custom-tailored AI roadmap to crush your competition.</p>
-                            <div class="mt-8">
-                                <button type="button" onclick="nextStep()" class="btn btn-primary text-lg">Start Evaluation</button>
+                    <div class="p-8 sm:p-12">
+
+                        <div id="step-1" class="step active">
+                            <div class="text-center mb-8">
+                                <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900">What's Your AI Business Score?</h1>
+                                <p class="text-gray-600 mt-3">Your AI Score is a measure of your business's readiness to compete using AI—it's the "cheat code" top businesses use to dominate their markets. Find out your score and get a FREE Custom AI Roadmap in 60 seconds.</p>
                             </div>
-                        </div>
-
-                        <div class="step" data-step="2"> <h2 class="text-3xl font-bold text-white">Just one more step...</h2>
-                            <p class="text-gray-300 mt-2">Enter your name and email to receive your personalized AI score and FREE roadmap.</p>
-                            <div class="mt-6 space-y-4 text-left">
-                                <div>
-                                    <label for="fullName" class="block text-sm font-medium text-white mb-2">Full Name</label>
-                                    <input type="text" id="fullName" class="form-input" placeholder="e.g., Jane Doe" required>
+                            <form id="user-info-form" novalidate>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <input type="text" id="fullName" placeholder="Full Name *" class="form-input" required>
+                                    <input type="email" id="email" placeholder="Primary Email Address *" class="form-input" required>
+                                    <input type="tel" id="phone" placeholder="Phone Number *" class="form-input" required>
+                                    <input type="text" id="website" placeholder="Company Website *" class="form-input" required>
                                 </div>
-                                <div>
-                                    <label for="email" class="block text-sm font-medium text-white mb-2">Email Address</label>
-                                    <input type="email" id="email" class="form-input" placeholder="you@company.com" required>
+                                <div class="mt-6">
+                                    <textarea id="businessDescription" rows="4" placeholder="Briefly describe your business and its biggest challenge... *" class="form-input" required></textarea>
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <p id="form-error-msg" class="text-red-500 text-sm" style="display: none;">Please fill out all required fields marked with *</p>
+                                </div>
+                                <div class="mt-6 text-center">
+                                    <button type="submit" class="btn btn-primary text-lg">Calculate My AI Score!</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="step-2" class="step">
+                            <div class="text-center mb-8">
+                                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Business Evaluation</h2>
+                                <p class="text-gray-600 mt-2">These answers determine your AI Business Score. Be honest.</p>
+                            </div>
+                            <form id="quiz-form">
+                                <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">1. What is your primary industry?</label><select id="q1" class="form-input"><option value="ecommerce">E-commerce / Retail</option><option value="service">Service-Based (Consulting, Agency, etc.)</option><option value="saas">SaaS / Technology</option><option value="manufacturing">Manufacturing / Logistics</option><option value="other">Other</option></select></div>
+                                <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">2. How do you currently attract most of your customers?</label><select id="q2" class="form-input"><option value="digital_marketing">Digital Marketing (SEO, Ads, Social Media)</option><option value="sales_team">Direct Sales Team</option><option value="referrals">Word of Mouth / Referrals</option><option value="content">Content Marketing / Inbound</option></select></div>
+                                <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">3. What is your biggest challenge right now?</label><select id="q3" class="form-input"><option value="lead_generation">Generating enough high-quality leads</option><option value="conversion">Converting leads into customers</option><option value="efficiency">Operational efficiency and costs</option><option value="customer_support">Customer support and retention</option></select></div>
+                                <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">4. How familiar are you with using AI tools in your business?</label><select id="q4" class="form-input"><option value="not_familiar">Not familiar at all</option><option value="somewhat_familiar">Somewhat familiar, used basic tools</option><option value="very_familiar">Very familiar, actively using AI</option></select></div>
+                                <div class="mt-8 flex justify-between"><button type="button" id="back-to-step1-btn" class="btn btn-secondary">Back</button><button type="button" id="generate-roadmap-btn" class="btn btn-primary">See My Score & Roadmap</button></div>
+                            </form>
+                        </div>
+
+                        <div id="step-3" class="step">
+                            <div class="text-center mb-10">
+                                <h2 class="text-2xl font-bold text-gray-900 mb-4">Your AI Business Score is:</h2>
+                                <p id="score-text" class="text-7xl font-extrabold text-gray-900">0</p>
+                                <div id="score-meter-container">
+                                    <div id="score-meter"><div id="score-needle" style="left: 0%;"></div></div>
+                                    <div id="score-labels">
+                                        <span>Poor</span>
+                                        <span>Average</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                </div>
+                                <p id="score-feedback" class="mt-4 text-xl text-gray-600 font-semibold"></p>
+                            </div>
+
+                            <div class="text-center mb-8">
+                                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Your Custom AI Roadmap</h2>
+                                <p class="text-gray-600 mt-2">Based on your score, here are the 5 biggest opportunities for you RIGHT NOW:</p>
+                            </div>
+                            <div id="evaluation-results" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            </div>
+                            <div class="mt-12 text-center border-t border-gray-200 pt-10">
+                                <h3 class="text-3xl font-extrabold text-gray-900">But let's be real for a second...</h3>
+                                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">A list of ideas is one thing. A complete transformation is another. <strong class="text-blue-600">Imagine this:</strong> You wake up, grab your coffee, and open your laptop. Instead of staring at an empty calendar, you see it's <strong class="text-gray-800">PACKED with high-quality, pre-qualified sales calls</strong>. Your systems are running on autopilot, nurturing leads, closing deals, and delighting customers while you sleep.</p>
+                                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">How would that feel? To finally have the <strong class="text-gray-800">freedom and peace of mind</strong> knowing your business growth is not just possible, but inevitable? To not just have more money, but more <strong class="text-gray-800">TIME</strong> to spend with your family, on your hobbies, or planning your next big move?</p>
+                                <p class="text-gray-800 font-bold mt-6 max-w-2xl mx-auto">This isn't a fantasy. This is what happens when you fully leverage the power of AI.</p>
+                            </div>
+                            <div class="mt-10 text-center bg-gray-50 p-6 rounded-lg border border-gray-200">
+                                <h3 class="text-2xl font-bold text-gray-900">The Window of Opportunity is Closing FAST.</h3>
+                                <p class="text-gray-600 mt-2 mb-6">Your competitors are either figuring this out now or they will be soon. You have a choice: lead the pack or get left behind in the dust. We've done the research, we've built the systems. We can hand you the keys.</p>
+                                <button type="button" id="lead-the-pack-btn" class="btn btn-primary text-lg animate-pulse">I'm Ready To Lead The Pack!</button>
+                            </div>
+                            <div class="mt-8 flex justify-between items-center">
+                                <button type="button" id="back-to-step2-btn" class="btn btn-secondary">Back to Questions</button>
+                                <button type="button" id="no-thanks-step3-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No thanks, I'll figure it out myself</button>
+                            </div>
+                        </div>
+
+                        <div id="step-4" class="step">
+                            <div class="text-center">
+                                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">"Yes! I Want The Unfair Advantage!"</h1>
+                                <p class="mt-4 text-xl text-gray-600">Get The Complete, Done-For-You AI Integration Strategy & Market Analysis</p>
+                            </div>
+                            <div class="mt-10 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-gray-800">Here's Everything You're Getting:</h3>
+                                        <ul class="mt-4 space-y-3 text-gray-600">
+                                            <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✓</span> <strong class="text-gray-800 mr-1">Deep-Dive Analysis:</strong> We'll dissect your current business processes to find the biggest leverage points.</li>
+                                            <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✓</span> <strong class="text-gray-800 mr-1">Tailored AI Roadmap:</strong> A step-by-step plan to implement AI for maximum ROI. No fluff.</li>
+                                            <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✓</span> <strong class="text-gray-800 mr-1">Competitive "Spy" Report:</strong> See exactly how your competitors are (or aren't) using AI.</li>
+                                            <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✓</span> <strong class="text-gray-800 mr-1">Top AI "Toolbox":</strong> We'll identify the exact AI tools that are perfect for your business.</li>
+                                            <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✓</span> <strong class="text-gray-800 mr-1">ROI Projections:</strong> Clear, conservative estimates on your potential return on investment.</li>
+                                            <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✓</span> <strong class="text-gray-800 mr-1">1-on-1 Strategy Call:</strong> A private consultation to go over the plan and answer all your questions.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-blue-50 border border-blue-200 p-8 rounded-lg text-center">
+                                        <p class="text-lg font-semibold text-blue-800">LIMITED TIME OFFER</p>
+                                        <p class="text-6xl font-extrabold text-gray-900 my-2"><span class="text-4xl text-gray-500 line-through">$798</span> $399</p>
+                                        <p class="text-gray-800 font-bold">50% OFF - TODAY ONLY!</p>
+                                        <a href="https://a793561c-5d7c-4eda-9344-45edde3c6b17.paylinks.godaddy.com/f3e7f2bb-468b-413e-92f7-3a5" id="buy-link-1" class="mt-6 w-full btn btn-primary text-xl block">Claim My 50% Discount Now!</a>
+                                        <p class="text-xs text-gray-500 mt-2">Secure 128-bit SSL encrypted payment.</p>
+                                        <div id="countdown" class="mt-4 text-lg font-bold text-red-500"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="mt-8 flex justify-center gap-4">
-                                <button type="button" onclick="prevStep()" class="btn btn-secondary">Back</button>
-                                <button type="submit" class="btn btn-primary">Get My Score!</button>
+                            <div class="mt-8 text-center">
+                                <button type="button" id="no-thanks-step4-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No thanks, I'll figure it out myself</button>
                             </div>
                         </div>
-                        
-                        <div class="step" data-step="3">
-                            <h2 class="text-3xl font-bold text-white">Analyzing Your Business...</h2>
-                            <p class="text-gray-300 mt-2">Your AI-Readiness Score is:</p>
-                            <p id="score-display" class="text-6xl font-extrabold text-blue-400 my-4">0%</p>
-                            <div id="score-meter-container">
-                                <div id="score-meter"><div id="score-needle" style="left: 0%;"></div></div>
+
+                        <div id="step-5" class="step">
+                            <div class="text-center">
+                                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">Wait! One Last Thing...</h1>
+                                <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">I get it. A $399 investment can feel like a big leap, even when the potential return is massive. But I saw your AI score, and I truly believe your business is on the verge of a breakthrough.</p>
+                                <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">I don't want a small price difference to be what holds you back. So, for you, right now, I want to make this an absolute no-brainer.</p>
                             </div>
-                            <p class="text-gray-400 mt-4">Redirecting you to your results...</p>
+                            <div class="mt-10 bg-white p-8 rounded-xl shadow-lg border-2 border-dashed border-blue-500">
+                                <div class="text-center">
+                                    <h3 class="text-2xl font-bold text-gray-800">Final Chance: Take an Extra $50 Off</h3>
+                                    <p class="text-6xl font-extrabold text-gray-900 my-4"><span class="text-4xl text-gray-500 line-through">$399</span> $349</p>
+                                    <p class="text-gray-600 mb-6">Get the complete package for just $349. This offer is not available anywhere else and will disappear once you leave this page.</p>
+                                    <a href="https://a793561c-5d7c-4eda-9344-45edde3c6b17.paylinks.godaddy.com/f97f5af4-911a-43ab-9c00-a48" id="buy-link-2" class="btn btn-primary text-xl">Yes! I'll Take The $50 Discount!</a>
+                                </div>
+                            </div>
+                            <div class="mt-8 text-center">
+                                <button type="button" id="no-thanks-step5-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No, I'm still not interested</button>
+                            </div>
                         </div>
-                    </form>
+
+                        <div id="step-6" class="step">
+                            <div class="text-center">
+                                <svg class="mx-auto h-16 w-16 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.002-.018.002-.006.001c-.004.001-.007.001-.011.001H4.25l-.006-.001-.018-.002-.07-.002a49.96 49.96 0 00-2.265-2.43m15.482 0l.07.002.018.002.006.001c.004.001.007.001.011.001h.012l.006-.001.018-.002.07-.002a49.96 49.96 0 012.265-2.43m-15.482 0l-.07.002a50.014 50.014 0 01-2.265 2.43" />
+                                </svg>
+                                <h1 class="mt-4 text-4xl sm:text-5xl font-extrabold text-gray-900">You're On The Right Path!</h1>
+                                <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">No problem at all. The fact that you've gone through this evaluation shows you're already ahead of 90% of business owners.</p>
+                                <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">Seriously, take the 5 free suggestions you just received and <strong class="text-gray-800">put them into action</strong>. Even implementing one of them can have a massive impact on your business.</p>
+                                <p class="mt-6 text-gray-600 max-w-2xl mx-auto">Keep learning, keep growing, and when you're ready to take the next giant leap, we'll be here.</p>
+                            </div>
+                        </div>
+
+                        <div id="thank-you" class="step text-center">
+                            <svg class="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <h1 class="mt-4 text-4xl sm:text-5xl font-extrabold text-gray-900">Congratulations & Welcome!</h1>
+                            <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">You just made one of the smartest decisions you'll ever make for your business. The journey to your new, AI-powered future starts <strong class="text-gray-800">right now</strong>.</p>
+                            <p class="mt-6 text-gray-600 max-w-2xl mx-auto">Keep an eye on your inbox! We're sending a confirmation email to <strong id="user-final-email" class="text-gray-800">your email</strong> with your receipt and the next steps to begin your transformation. Get ready to see what's truly possible.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="services" class="tech-pattern-bg py-20">
-            </section>
-
-        <section id="about" class="bg-black py-20">
-            </section>
-
-        <section id="why-us" class="tech-pattern-bg py-20">
-             </section>
-        
-        <section id="social-proof" class="bg-black py-20">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-white">Trusted by Businesses Like Yours</h2>
-                <p class="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">We don't just talk about results, we deliver them.</p>
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-[#000814] border border-[#003366] rounded-lg p-6">
-                        <p class="text-gray-300">"Working with Pariss United was a game-changer. Our lead generation is now completely automated and 3x more effective. We saw a positive ROI in under 60 days."</p>
-                        <p class="mt-4 font-bold text-white">- John S., CEO of MarketPro</p>
+        <section id="services" class="py-20 bg-black tech-pattern-bg">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white">Our AI Powered Business Consulting Services</h2>
+                    <p class="text-gray-400 mt-2">We don't just advise—we integrate with precision.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="service-card p-8 rounded-lg">
+                        <h3 class="text-xl font-bold text-white mb-2">AI Strategy & Integration</h3>
+                        <p class="text-gray-400">Developing bespoke AI roadmaps and seamlessly integrating intelligent solutions into your existing workflows for maximum impact.</p>
                     </div>
-                    <div class="bg-[#000814] border border-[#003366] rounded-lg p-6">
-                        <p class="text-gray-300">"The AI-powered customer support system they built for us cut down our response times by 90% and dramatically increased customer satisfaction. Highly recommend."</p>
-                        <p class="mt-4 font-bold text-white">- Sarah L., Operations Manager</p>
+                    <div class="service-card p-8 rounded-lg">
+                        <h3 class="text-xl font-bold text-white mb-2">Custom AI Solutions</h3>
+                        <p class="text-gray-400">Building custom machine learning models and AI-powered applications from the ground up to solve your unique business challenges.</p>
                     </div>
-                    <div class="bg-[#000814] border border-[#003366] rounded-lg p-6">
-                        <p class="text-gray-300">"I was skeptical about AI, but their team created a clear roadmap that made sense. We've saved over 20 hours of manual data entry per week."</p>
-                        <p class="mt-4 font-bold text-white">- Michael B., Small Business Owner</p>
+                    <div class="service-card p-8 rounded-lg">
+                        <h3 class="text-xl font-bold text-white mb-2">Process Automation</h3>
+                        <p class="text-gray-400">Leveraging AI to automate repetitive tasks, streamline operations, reduce costs, and free up your team for high-value work.</p>
+                    </div>
+                    <div class="service-card p-8 rounded-lg">
+                        <h3 class="text-xl font-bold text-white mb-2">Marketing & Customer Acquisition</h3>
+                        <p class="text-gray-400">Utilize AI-driven analytics to identify your ideal customers, automate targeted campaigns, and dramatically lower acquisition costs.</p>
+                    </div>
+                    <div class="service-card p-8 rounded-lg">
+                        <h3 class="text-xl font-bold text-white mb-2">Project Management</h3>
+                        <p class="text-gray-400">Applying deep expertise in managing high-stakes technology projects, ensuring your AI initiatives are delivered successfully from start to finish.</p>
+                    </div>
+                    <div class="service-card p-8 rounded-lg">
+                        <h3 class="text-xl font-bold text-white mb-2">Business Development</h3>
+                        <p class="text-gray-400">Full-service business implementation, including registration, branding, and strategic planning to build a strong foundation for growth.</p>
                     </div>
                 </div>
             </div>
         </section>
 
+        <section id="ebook" class="py-20 bg-[#000814]">
+            <div class="container mx-auto px-6">
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 md:p-12 shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Get The <span class="text-[#0099ff]">Free E-book</span></h2>
+                        <h3 class="text-4xl font-extrabold text-white mt-2">Decoding Your AI Business Score</h3>
+                        <p class="text-gray-400 mt-4">Your AI Score is the most important metric for your company's future success. This guide explains what your score means, how it's calculated, and the steps you can take to improve it today.</p>
+                        <form action="https://pariss-united-llc.kit.com/828d49543e" method="POST" class="mt-6" target="_blank">
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <input type="email" name="email" placeholder="Enter your email address" class="form-input flex-grow" required>
+                                <button type="submit" class="btn btn-primary">Download Now</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="text-center">
+                        <img src="images/ebook-cover.jpg" alt="Decoding Your AI Business Score E-book Cover" class="w-full max-w-xs mx-auto rounded-lg shadow-2xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 bg-black">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white">Why Partner With Pariss United?</h2>
+                        <p class="text-gray-400 mt-4 max-w-xl">We bridge the gap between business strategy and artificial intelligence, offering a unique blend of technical expertise and real-world business acumen to deliver what truly matters: results.</p>
+                        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="why-us-card">
+                                <h3 class="text-xl font-bold text-white mb-2">Proven Results</h3>
+                                <p class="text-gray-400">We don't just consult; we deliver measurable ROI.</p>
+                            </div>
+                            <div class="why-us-card">
+                                <h3 class="text-xl font-bold text-white mb-2">Scalable AI Solutions</h3>
+                                <p class="text-gray-400">AI that grows with you, from startup to enterprise.</p>
+                            </div>
+                            <div class="why-us-card">
+                                <h3 class="text-xl font-bold text-white mb-2">Transparent Partnership</h3>
+                                <p class="text-gray-400">No black boxes. You're a partner in the process, not a spectator.</p>
+                            </div>
+                            <div class="why-us-card">
+                                <h3 class="text-xl font-bold text-white mb-2">Inclusive by Design</h3>
+                                <p class="text-gray-400">Broader perspectives lead to better, more equitable business outcomes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <img src="images/ai-professional-dashboard.jpg" alt="A business professional interacting with an AI data interface" class="rounded-lg shadow-2xl w-full h-auto object-cover max-w-md">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-black tech-pattern-bg">
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Ready to Elevate Your Business?</h2>
+                <p class="text-gray-400 mt-2 mb-8 max-w-2xl mx-auto">Let's discuss how AI can revolutionize your operations and drive unprecedented growth. Schedule your free, no-obligation consultation today.</p>
+                <a href="contact.html" class="btn btn-primary text-xl">
+                    Contact Us Now
+                </a>
+            </div>
+        </section>
     </main>
 
     <footer class="bg-[#000814] border-t border-[#003366]">
         <div class="container mx-auto px-6 py-8 text-center text-gray-400">
-            <p class="mb-2">&copy; 2025 Pariss United LLC. All Rights Reserved.</p>
+            <p class="mb-2">&copy; 2024 Pariss United LLC. All Rights Reserved.</p>
             <p>Email: <a href="mailto:info@parissunited.com" class="text-[#0099ff] hover:underline">info@parissunited.com</a></p>
         </div>
     </footer>
 
-    <script>
-        // Dummy script to simulate the form logic
+    <div id="chatbot-container">
+        <div id="chat-window">
+            <div id="chat-header">
+                <div id="chat-header-image-container">
+                    <img id="chat-header-image" src="images/celeste-chatbot.jpg" alt="Celeste AI Advisor">
+                </div>
+                <h3 class="text-xl font-extrabold text-white">Celeste</h3>
+                <p class="text-sm text-gray-300 -mt-1">Pariss United Business Advisor</p>
+            </div>
+            <div id="chat-messages"></div>
+            <div id="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Ask a question...">
+            </div>
+        </div>
+        <div id="chatbot-toggle">
+            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.184a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+            </svg>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+        // --- Your web app's Firebase configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyACgeSd_w8MlupY90R2xolzT_MGnT2sXj4",
+            authDomain: "pariss-united-site.firebaseapp.com",
+            projectId: "pariss-united-site",
+            storageBucket: "pariss-united-site.appspot.com",
+            messagingSenderId: "480646261421",
+            appId: "1:480646261421:web:ae734503d7b8bf5ca3f424",
+            measurementId: "G-NXSC885K40"
+        };
+
+        // --- Initialize Firebase ---
+        let db;
+        let analytics;
+        try {
+            const app = initializeApp(firebaseConfig);
+            analytics = getAnalytics(app);
+            db = getFirestore(app);
+            console.log("Firebase connected successfully.");
+        } catch (e) {
+            console.error("Error initializing Firebase: ", e);
+            db = null;
+        }
+
+        // --- Global Function to Save User Data ---
+        async function saveUserDataToFirestore(userData) {
+            if (!db) {
+                console.log("Database not connected. Skipping save.");
+                return;
+            }
+            try {
+                const docRef = await addDoc(collection(db, "leads"), { ...userData, createdAt: serverTimestamp() });
+                console.log("Lead saved to Firestore with ID: ", docRef.id);
+            } catch (e) {
+                console.error("Error saving lead to Firestore: ", e);
+            }
+        }
+
+        // --- Main Application Logic ---
         let currentStep = 1;
-        const totalSteps = 3;
-        const form = document.getElementById('ai-evaluation-form');
-        const steps = document.querySelectorAll('.step');
-        const progressBar = document.getElementById('progress-bar');
+        const totalSteps = 4;
+        let userData = {};
+        let countdownInterval;
 
-        function showStep(stepNumber) {
-            steps.forEach(step => step.classList.remove('active'));
-            document.querySelector(`.step[data-step="${stepNumber}"]`).classList.add('active');
-            progressBar.style.width = `${((stepNumber - 1) / (totalSteps -1)) * 100}%`;
+        const aiRecommendations = {
+            'ecommerce': { 'lead_generation': [{ title: "AI-Powered Ad Targeting", description: "Use AI to analyze customer data and create hyper-targeted ad campaigns on social media and Google to attract high-intent shoppers." }, { title: "Predictive Analytics for Trends", description: "Leverage AI to predict emerging product trends, allowing you to stock the right products at the right time." }], 'conversion': [{ title: "Personalized Product Recommendations", description: "Implement an AI engine on your site to show visitors products they are most likely to buy, based on browsing history." }, { title: "AI Chatbots for 24/7 Sales", description: "Deploy a chatbot to answer customer questions, offer discounts, and guide users to checkout, even outside business hours." }], 'efficiency': [{ title: "Automated Inventory Management", description: "Use AI to forecast demand and automate reordering, reducing overstock and stockouts." }, { title: "Dynamic Pricing Optimization", description: "Implement AI tools to adjust prices in real-time based on demand, competitor pricing, and inventory levels to maximize profit." }], 'customer_support': [{ title: "AI Helpdesk for Instant Support", description: "Use an AI-powered helpdesk to instantly resolve common customer queries, freeing up your human agents for complex issues." }, { title: "Sentiment Analysis of Reviews", description: "Analyze customer reviews with AI to understand sentiment and proactively address common complaints." }] },
+            'service': { 'lead_generation': [{ title: "AI Lead Scoring", description: "Implement an AI system to score incoming leads based on their likelihood to convert, so your sales team can focus on the hottest prospects." }, { title: "Content Idea Generation", description: "Use AI to analyze industry trends and generate ideas for blog posts, webinars, and lead magnets that attract your target audience." }], 'conversion': [{ title: "Automated Email Follow-ups", description: "Create personalized, AI-driven email sequences to nurture leads and guide them through your sales funnel." }, { title: "AI-Powered Proposal Generation", description: "Use AI tools to quickly generate customized proposals and quotes, shortening your sales cycle." }], 'efficiency': [{ title: "AI Project Management Assistants", description: "Utilize AI to automate task scheduling, resource allocation, and progress tracking for your client projects." }, { title: "Meeting Transcription & Summarization", description: "Automatically transcribe and summarize client meetings with AI, ensuring no detail is missed and saving administrative time." }], 'customer_support': [{ title: "Proactive Client Outreach", description: "Use AI to monitor client activity and sentiment, and trigger proactive check-ins to improve retention." }, { title: "24/7 Appointment Booking Bot", description: "Implement an AI chatbot on your website that can qualify leads and book consultation calls automatically." }] },
+            'saas': { 'lead_generation': [{ title: "AI-Enhanced Content Marketing", description: "Use AI to optimize your blog content for SEO and identify topics that will attract high-quality organic traffic." }, { title: "Predictive Lead Scoring for Demos", description: "Analyze user behavior on your site to predict which free trial users are most likely to convert to paid, and prioritize them for sales outreach." }], 'conversion': [{ title: "AI-Powered Onboarding", description: "Create a personalized onboarding experience for new users, with AI-driven tips and tutorials based on their actions in your app." }, { title: "Churn Prediction", description: "Use AI to identify users at risk of churning and trigger automated retention campaigns to keep them as customers." }], 'efficiency': [{ title: "Automated Code Review", description: "Leverage AI tools to review code for bugs and vulnerabilities, speeding up your development cycle." }, { title: "AI-Driven Product Roadmapping", description: "Analyze user feedback and feature requests with AI to prioritize your product roadmap and build what customers truly want." }], 'customer_support': [{ title: "AI-Powered Knowledge Base", description: "Create a smart, searchable knowledge base that provides users with instant answers to their questions." }, { title: "Automated Bug Report Triage", description: "Use AI to automatically categorize and prioritize incoming bug reports, allowing your dev team to fix critical issues faster." }] }
+        };
+        aiRecommendations.manufacturing = aiRecommendations.service;
+        aiRecommendations.other = aiRecommendations.service;
+
+        function updateProgressBar() {
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-bar').textContent = `${Math.round(progress)}%`;
+            document.getElementById('progress-bar-container').style.display = (currentStep > 1 && currentStep < 4) ? 'block' : 'none';
         }
 
-        function nextStep() {
-            if (currentStep < totalSteps) {
-                currentStep++;
-                showStep(currentStep);
+        function normalizeUrl(url) {
+            if (!url) return '';
+            let normalized = url.trim();
+            if (!/^(?:f|ht)tps?\:\/\//.test(normalized)) {
+                normalized = 'https://' + normalized;
+            }
+            return normalized;
+        }
+
+        function nextStep(step) {
+            if (step >= 4 || typeof step === 'string') {
+                document.getElementById('progress-bar-container').style.display = 'none';
+            }
+
+            document.getElementById(`step-${currentStep}`)?.classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step-${currentStep}`)?.classList.add('active');
+
+            if (step === 4) startCountdown();
+            else stopCountdown();
+
+            updateProgressBar();
+            window.scrollTo(0, 0);
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step-${currentStep}`)?.classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step-${currentStep}`)?.classList.add('active');
+            if (step !== 4) stopCountdown();
+            updateProgressBar();
+            window.scrollTo(0, 0);
+        }
+
+        function stopCountdown() {
+            clearInterval(countdownInterval);
+        }
+
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            let time = 8 * 60 * 60;
+            if (countdownInterval) clearInterval(countdownInterval);
+            const updateTimer = () => {
+                const hours = Math.floor(time / 3600);
+                const minutes = Math.floor((time % 3600) / 60);
+                const seconds = time % 60;
+                countdownElement.textContent = `Offer Ends In: ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+                time--;
+                if (time < 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = "Offer Expired!";
+                    const buyButton = document.getElementById('buy-button');
+                    buyButton.disabled = true;
+                    buyButton.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            };
+            updateTimer();
+            countdownInterval = setInterval(updateTimer, 1000);
+        }
+
+        function calculateAiReadinessScore() {
+            let baseScore = 300;
+            const familiarity = document.getElementById('q4').value;
+            const industry = document.getElementById('q1').value;
+            const marketing = document.getElementById('q2').value;
+
+            switch (familiarity) {
+                case 'not_familiar': baseScore += 150; break;
+                case 'somewhat_familiar': baseScore += 300; break;
+                case 'very_familiar': baseScore += 450; break;
+            }
+            if (industry === 'saas' || industry === 'ecommerce') baseScore += 50;
+            if (marketing === 'digital_marketing') baseScore += 25;
+
+            return Math.min(850, baseScore + Math.floor(Math.random() * 25)); // Add slight variation
+        }
+
+        function updateScoreGauge(score) {
+            const scoreText = document.getElementById('score-text');
+            const scoreNeedle = document.getElementById('score-needle');
+            const scoreFeedback = document.getElementById('score-feedback');
+
+            // Animate the score number
+            let current = 300;
+            const timer = setInterval(() => {
+                current += 5;
+                if (current > score) current = score;
+                scoreText.textContent = current;
+                if (current >= score) clearInterval(timer);
+            }, 10);
+
+            // Position the needle
+            const percentage = (score - 300) / 550;
+            scoreNeedle.style.left = `${percentage * 100}%`;
+
+            if (score < 580) {
+                scoreFeedback.innerHTML = "<strong class='text-red-500'>Poor (300-579):</strong> This score indicates a high risk of being outpaced by competitors. Your business has significant foundational opportunities to integrate AI, and Pariss United can help build a strategy from the ground up.";
+            } else if (score < 670) {
+                scoreFeedback.innerHTML = "<strong class='text-yellow-500'>Average (580-669):</strong> You have some basic systems in place, but your business isn't yet leveraging AI for a competitive advantage. Pariss United specializes in optimizing these areas to accelerate your growth.";
+            } else if (score < 740) {
+                scoreFeedback.innerHTML = "<strong class='text-lime-500'>Good (670-739):</strong> Your business is using AI effectively in some areas. Now is the time to scale those successes. Pariss United can provide the advanced strategies to turn 'good' into 'excellent'.";
+            } else {
+                scoreFeedback.innerHTML = "<strong class='text-green-500'>Excellent (740-850):</strong> Congratulations! Your business is a leader in its use of AI. Pariss United can provide the expert, high-level strategies to help you solidify your market position and explore new frontiers.";
             }
         }
 
-        function prevStep() {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
+        async function validateAndGoToStep2() {
+            const form = document.getElementById('user-info-form');
+            const inputs = form.querySelectorAll('input[required], textarea[required]');
+            const errorMsg = document.getElementById('form-error-msg');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                input.classList.remove('invalid');
+                if (!input.value.trim()) {
+                    input.classList.add('invalid');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                errorMsg.style.display = 'block';
+                form.classList.add('shake');
+                setTimeout(() => form.classList.remove('shake'), 820);
+                return;
             }
+
+            errorMsg.style.display = 'none';
+            userData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                website: normalizeUrl(document.getElementById('website').value),
+                businessDescription: document.getElementById('businessDescription').value,
+            };
+            await saveUserDataToFirestore(userData);
+            nextStep(2);
         }
-        
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const emailField = document.getElementById('email');
-            const email = emailField.value;
-            // Add validation logic here
-            if(email){
-                currentStep++;
-                showStep(currentStep);
-                // Simulate score calculation and redirect
-                setTimeout(() => {
-                    const scoreDisplay = document.getElementById('score-display');
-                    const scoreNeedle = document.getElementById('score-needle');
-                    const score = Math.floor(Math.random() * 51) + 40; // Random score 40-90
-                    scoreDisplay.textContent = `${score}%`;
-                    scoreNeedle.style.left = `${score}%`;
-                    
-                    setTimeout(() => {
-                        window.location.href = `thank-you.html?email=${encodeURIComponent(email)}`;
-                    }, 2000);
-                }, 500);
+
+        function generateEvaluation() {
+            const score = calculateAiReadinessScore();
+            updateScoreGauge(score);
+
+            const industry = document.getElementById('q1').value;
+            const challenge = document.getElementById('q3').value;
+            let recommendations = aiRecommendations[industry]?.[challenge] || aiRecommendations.other.lead_generation;
+            const allRecos = Object.values(aiRecommendations[industry] || aiRecommendations.other).flat();
+            let finalRecommendations = [...recommendations];
+            let potentialRecos = allRecos.filter(reco => !finalRecommendations.some(r => r.title === reco.title));
+            while (finalRecommendations.length < 5 && potentialRecos.length > 0) {
+                finalRecommendations.push(potentialRecos.splice(Math.floor(Math.random() * potentialRecos.length), 1)[0]);
             }
+            const resultsContainer = document.getElementById('evaluation-results');
+            resultsContainer.innerHTML = '';
+            finalRecommendations.slice(0, 5).forEach(reco => {
+                const card = document.createElement('div');
+                card.className = 'bg-gray-50 p-6 rounded-lg border border-gray-200 transform hover:-translate-y-1 transition-transform';
+                card.innerHTML = `<h4 class="font-bold text-lg text-gray-800">${reco.title}</h4><p class="text-gray-600 mt-2 text-sm">${reco.description}</p>`;
+                resultsContainer.appendChild(card);
+            });
+            nextStep(3);
+        }
+
+        function purchase(offerType) {
+            // This function is now just for tracking, the link handles the redirect.
+            console.log(`User clicked purchase for ${offerType} offer.`);
+            // You can add analytics tracking here if you wish.
+        }
+
+        // --- Event Listener Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Step 1
+            document.getElementById('user-info-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                validateAndGoToStep2();
+            });
+
+            // Step 2
+            document.getElementById('back-to-step1-btn').addEventListener('click', () => prevStep(1));
+            document.getElementById('generate-roadmap-btn').addEventListener('click', generateEvaluation);
+
+            // Step 3
+            document.getElementById('lead-the-pack-btn').addEventListener('click', () => nextStep(4));
+            document.getElementById('back-to-step2-btn').addEventListener('click', () => prevStep(2));
+            document.getElementById('no-thanks-step3-btn').addEventListener('click', () => nextStep(5));
+
+            // Step 4
+            document.getElementById('buy-link-1').addEventListener('click', () => purchase('main'));
+            document.getElementById('no-thanks-step4-btn').addEventListener('click', () => nextStep(5));
+
+            // Step 5
+            document.getElementById('buy-link-2').addEventListener('click', () => purchase('downsell'));
+            document.getElementById('no-thanks-step5-btn').addEventListener('click', () => nextStep(6));
+
+            // --- Chatbot Logic ---
+            const chatbotToggle = document.getElementById('chatbot-toggle');
+            const chatWindow = document.getElementById('chat-window');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            let chatHistory = [];
+
+            chatbotToggle.addEventListener('click', () => {
+                chatWindow.classList.toggle('open');
+            });
+
+            const addBotMessage = (message) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message bot-message';
+                messageDiv.innerHTML = message; // Use innerHTML to render links
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            const addUserMessage = (message) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message user-message';
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            const getCelesteResponse = async (userInput) => {
+                addBotMessage("Thinking...");
+
+                const prompt = `You are Celeste, a friendly and professional AI business advisor for Pariss United LLC. Your goal is to help business owners understand the value of AI and guide them towards two actions: 1) Taking the free AI evaluation on the website, or 2) Booking a consultation.
+
+                Current conversation history:
+                ${JSON.stringify(chatHistory)}
+
+                User's latest message: "${userInput}"
+
+                Your task:
+                1. Answer the user's question concisely and professionally.
+                2. Explain *why* a high AI score is important for the financial health and competitive advantage of their business.
+                3. Always end your response by gently guiding them to take the next step. Frame the evaluation tool as the best first step.
+                4. Keep your responses to 2-3 short paragraphs.
+                5. Do not use markdown.`;
+
+                try {
+                    let fullChatHistory = [...chatHistory, { role: "user", parts: [{ text: prompt }] }];
+                    const payload = { contents: fullChatHistory };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+
+                    const result = await response.json();
+
+                    // Remove "Thinking..." message
+                    chatMessages.removeChild(chatMessages.lastChild);
+
+                    if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts[0]) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        const botResponse = text.replace(/\n/g, '<br>') + `<br><br>The best way to see how this applies to *your* business is by taking the <a href="#" onclick="document.getElementById('ai-app-section').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-blue-300 underline">Free AI Evaluation</a>.`;
+                        addBotMessage(botResponse);
+                        chatHistory.push({ role: "user", parts: [{ text: userInput }] });
+                        chatHistory.push({ role: "model", parts: [{ text: text }] });
+                    } else {
+                        addBotMessage("I'm sorry, I couldn't generate a response. Could you please rephrase your question?");
+                    }
+                } catch (error) {
+                    console.error("Error fetching AI response:", error);
+                    chatMessages.removeChild(chatMessages.lastChild);
+                    addBotMessage("My apologies, I'm unable to respond at the moment. Please feel free to take our AI evaluation or contact us directly.");
+                }
+            };
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && chatInput.value.trim() !== '') {
+                    const userInput = chatInput.value.trim();
+                    addUserMessage(userInput);
+                    getCelesteResponse(userInput);
+                    chatInput.value = '';
+                }
+            });
+
+            // Initial bot message
+            setTimeout(() => {
+                const initialMessage = `Hello! I'm Celeste, your Pariss United Business Advisor. 
+                <br><br>
+                I can help you understand your AI Business Score, which is like a financial cheat code for your company's future. A high score gives you an unfair advantage, while a low score means you're leaving money on the table for your competitors.
+                <br><br>
+                How can I help you explore this?`;
+                addBotMessage(initialMessage);
+                // Store the plain text version in history
+                chatHistory.push({ role: "model", parts: [{ text: initialMessage.replace(/<br>/g, '') }] });
+            }, 1500);
         });
+
+        // Initialize
+        updateProgressBar();
     </script>
 </body>
 </html>
