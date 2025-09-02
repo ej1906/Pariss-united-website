@@ -294,7 +294,7 @@
             background-color: #000814;
             border: 1px solid #003366;
             border-radius: 1rem;
-            overflow: visible; /* Allow image to pop out */
+            overflow: hidden; /* Changed for better layout control */
             display: flex;
             flex-direction: column;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -302,6 +302,9 @@
             opacity: 0;
             transition: transform 0.3s ease, opacity 0.3s ease;
             pointer-events: none;
+        }
+        #chat-window.with-image {
+             overflow: visible;
         }
 
         #chat-window.open {
@@ -315,9 +318,13 @@
             text-align: center;
             position: relative;
             flex-shrink: 0;
-            padding-top: 70px; /* Make space for the larger image */
+            padding-top: 1rem;
             padding-bottom: 1rem;
             border-radius: 1rem 1rem 0 0;
+            z-index: 10;
+        }
+        #chat-header.with-image {
+             padding-top: 70px;
         }
 
         #chat-header-image-container {
@@ -362,6 +369,26 @@
         .bot-message.is-thinking {
             color: #ccc;
             font-style: italic;
+        }
+        #chat-reply-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem 0 1rem;
+            align-self: flex-start;
+        }
+        .reply-btn {
+            background-color: #005f99;
+            color: white;
+            border: 1px solid #0077cc;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .reply-btn:hover {
+            background-color: #0077cc;
         }
 
         .user-message {
@@ -598,20 +625,25 @@
 
         <section id="ebook" class="py-20 bg-[#000814]">
             <div class="container mx-auto px-6">
-                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 md:p-12 shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h2 class="text-3xl font-bold text-white">Get The <span class="text-[#0099ff]">Free E-book</span></h2>
-                        <h3 class="text-4xl font-extrabold text-white mt-2">Decoding Your AI Business Score</h3>
-                        <p class="text-gray-400 mt-4">Your AI Score is the most important metric for your company's future success. This guide explains what your score means, how it's calculated, and the steps you can take to improve it today.</p>
-                        <form action="https://pariss-united-llc.kit.com/828d49543e" method="POST" class="mt-6" target="_blank">
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <input type="email" name="email" placeholder="Enter your email address" class="form-input flex-grow" required>
-                                <button type="submit" class="btn btn-primary">Download Now</button>
-                            </div>
-                        </form>
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 md:p-12 shadow-2xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h2 class="text-3xl font-bold text-white">Get The <span class="text-[#0099ff]">Free E-book</span></h2>
+                            <h3 class="text-4xl font-extrabold text-white mt-2">Decoding Your AI Business Score</h3>
+                            <p class="text-gray-400 mt-4">Your AI Score is the most important metric for your company's future success. This guide explains what your score means, how it's calculated, and the steps you can take to improve it today.</p>
+                            <form id="ebook-form" class="mt-6">
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <input type="email" id="ebook-email" placeholder="Enter your email address" class="form-input flex-grow" required>
+                                    <button type="submit" class="btn btn-primary">Download Now</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="text-center">
+                            <img src="https://raw.githubusercontent.com/ej1906/Pariss-united-website/main/Images/ebook-cover.jpg" alt="Decoding Your AI Business Score E-book Cover" class="w-full max-w-xs mx-auto rounded-lg shadow-2xl">
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <img src="https://raw.githubusercontent.com/ej1906/Pariss-united-website/main/Images/ebook-cover.jpg" alt="Decoding Your AI Business Score E-book Cover" class="w-full max-w-xs mx-auto rounded-lg shadow-2xl">
+                    <div id="ebook-success-message" class="hidden mt-6 text-center text-green-400 border border-green-600 bg-green-900/50 p-4 rounded-lg">
+                        Thank you! Your download will begin shortly.
                     </div>
                 </div>
             </div>
@@ -732,8 +764,8 @@
     </footer>
 
     <div id="chatbot-container">
-        <div id="chat-window">
-            <div id="chat-header">
+        <div id="chat-window" class="with-image">
+            <div id="chat-header" class="with-image">
                 <div id="chat-header-image-container">
                     <img id="chat-header-image" src="https://raw.githubusercontent.com/ej1906/Pariss-united-website/main/Images/celeste-chatbot.jpg" alt="Celeste AI Advisor" class="object-cover">
                 </div>
@@ -754,6 +786,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Ebook Form Logic ---
+            const ebookForm = document.getElementById('ebook-form');
+            if(ebookForm) {
+                ebookForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const emailInput = document.getElementById('ebook-email');
+                    const successMessage = document.getElementById('ebook-success-message');
+                    if (emailInput.value && emailInput.checkValidity()) {
+                        if (successMessage) successMessage.classList.remove('hidden');
+                        
+                        const link = document.createElement('a');
+                        link.href = 'https://raw.githubusercontent.com/ej1906/Pariss-united-website/main/Decoding%20Your%20AI%20Business%20Score%20(1).pdf';
+                        link.download = 'Decoding-Your-AI-Business-Score.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                        emailInput.value = '';
+                    } else {
+                        emailInput.classList.add('invalid');
+                    }
+                });
+            }
+
+
             // --- Main Application Logic ---
             let currentStep = 1;
             const totalSteps = 4;
@@ -937,8 +994,6 @@
             
             function processPurchase() {
                 const email = encodeURIComponent(userData.email);
-                // In a real scenario, the payment gateway would handle the redirect on success.
-                // We are simulating that redirect here.
                 window.location.href = `thank-you.html?email=${email}`;
             }
 
@@ -962,22 +1017,43 @@
             const chatWindow = document.getElementById('chat-window');
             const chatMessages = document.getElementById('chat-messages');
             const chatInput = document.getElementById('chat-input');
+            let conversationState = 'start';
             
             if(chatbotToggle){
                 chatbotToggle.addEventListener('click', () => {
                     chatWindow.classList.toggle('open');
                     if (chatWindow.classList.contains('open') && chatMessages.children.length === 0) {
-                         setTimeout(showInitialBotMessage, 500);
+                         setTimeout(startConversation, 500);
                     }
                 });
             }
 
-            const addBotMessage = (message, isThinking = false) => {
+            const addBotMessage = (message, buttons = []) => {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'chat-message bot-message';
-                if(isThinking) messageDiv.classList.add('is-thinking');
                 messageDiv.innerHTML = message;
                 chatMessages.appendChild(messageDiv);
+
+                // Remove existing buttons
+                const existingButtons = document.getElementById('chat-reply-buttons');
+                if (existingButtons) {
+                    existingButtons.remove();
+                }
+
+                // Add new buttons if any
+                if (buttons.length > 0) {
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.id = 'chat-reply-buttons';
+                    buttons.forEach(button => {
+                        const btn = document.createElement('button');
+                        btn.className = 'reply-btn';
+                        btn.textContent = button.text;
+                        btn.onclick = () => handleReply(button.payload);
+                        buttonContainer.appendChild(btn);
+                    });
+                    chatMessages.appendChild(buttonContainer);
+                }
+
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 return messageDiv;
             };
@@ -990,50 +1066,77 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             };
             
-            const getMockCelesteResponse = (userInput) => {
-                 const thinkingMsg = addBotMessage("Thinking...", true);
-                 
-                 setTimeout(() => {
-                    let response;
-                    userInput = userInput.toLowerCase();
+            const handleReply = (payload) => {
+                // Find the button text and add it as a user message
+                const buttonText = conversationTree[conversationState].buttons.find(b => b.payload === payload).text;
+                addUserMessage(buttonText);
+                
+                // Remove buttons after click
+                const existingButtons = document.getElementById('chat-reply-buttons');
+                if (existingButtons) {
+                    existingButtons.remove();
+                }
 
-                    if (userInput.includes("price") || userInput.includes("cost") || userInput.includes("how much")) {
-                        response = "We offer a range of services tailored to your specific needs. The best way to get an accurate quote is to complete our AI Score evaluation. It helps us understand your business so we can provide the most value.<br><br>Why not start with the <a href='#' onclick=\"document.getElementById('ai-app-section').scrollIntoView({ behavior: 'smooth' }); return false;\" class='text-blue-300 underline'>Free AI Evaluation</a> right now?";
-                    } else if (userInput.includes("score") || userInput.includes("quiz") || userInput.includes("test")) {
-                        response = "The AI Business Score is a crucial metric that shows how prepared your business is for the future. A higher score means you're better equipped to increase profits and beat competitors.<br><br>You can find out your score in 60 seconds by taking the <a href='#' onclick=\"document.getElementById('ai-app-section').scrollIntoView({ behavior: 'smooth' }); return false;\" class='text-blue-300 underline'>Free AI Evaluation</a> on our homepage!";
-                    } else if (userInput.includes("contact") || userInput.includes("talk") || userInput.includes("human")) {
-                        response = "Of course! You can reach out to our expert team directly through our <a href='contact.html' class='text-blue-300 underline'>Contact Page</a>. We'd be happy to schedule a call with you."
-                    } else if (userInput.includes("hello") || userInput.includes("hi")) {
-                        response = "Hello there! How can I help you understand your AI business potential today?";
-                    } else {
-                        response = "That's an excellent question. The most effective way we can answer that for your specific situation is by first understanding your business's AI readiness. <br><br>The <a href='#' onclick=\"document.getElementById('ai-app-section').scrollIntoView({ behavior: 'smooth' }); return false;\" class='text-blue-300 underline'>Free AI Evaluation</a> is the perfect starting point for that conversation.";
-                    }
-                    
-                    thinkingMsg.remove();
-                    addBotMessage(response);
-                    
-                }, 1500);
+                conversationState = payload;
+                setTimeout(runConversation, 500);
             };
 
-            if(chatInput){
-                 chatInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && chatInput.value.trim() !== '') {
-                        const userInput = chatInput.value.trim();
-                        addUserMessage(userInput);
-                        getMockCelesteResponse(userInput);
-                        chatInput.value = '';
+            const runConversation = () => {
+                const node = conversationTree[conversationState];
+                if (node) {
+                    addBotMessage(node.message, node.buttons);
+                    if (node.action) {
+                        node.action();
                     }
-                });
-            }
+                }
+            };
+            
+            const conversationTree = {
+                'start': {
+                    message: "Hello! I'm Celeste, your AI Business Advisor. I can help you understand how AI can transform your business. What's your primary goal today?",
+                    buttons: [
+                        { text: "Find my AI Score", payload: "get_score" },
+                        { text: "Learn about services", payload: "learn_services" },
+                        { text: "Just browsing", payload: "browsing" }
+                    ]
+                },
+                'get_score': {
+                    message: "Excellent choice! The AI Score is the best way to get a custom roadmap for your business. It's free and takes about 60 seconds.",
+                    buttons: [{ text: "Start the AI Score quiz", payload: "action_score" }]
+                },
+                'learn_services': {
+                    message: "We specialize in AI Strategy, Automation, and Custom Solutions to boost your revenue and efficiency. Which area interests you most?",
+                    buttons: [
+                        { text: "AI Strategy", payload: "action_services" },
+                        { text: "Automation", payload: "action_services" },
+                        { text: "Back to start", payload: "start" }
+                    ]
+                },
+                'browsing': {
+                    message: "No problem! A great place to start is our free e-book, 'Decoding Your AI Business Score'. It's full of valuable insights.",
+                    buttons: [{ text: "Get the free e-book", payload: "action_ebook" }]
+                },
+                'action_score': {
+                    message: "Great! I'll scroll you down to the quiz now. Just fill it out to begin.",
+                    action: () => document.getElementById('ai-app-section').scrollIntoView({ behavior: 'smooth' }),
+                    buttons: [{ text: "Anything else?", payload: "start" }]
+                },
+                'action_services': {
+                    message: "Perfect. I'll take you to our services section where you can see detailed descriptions of how we help businesses like yours.",
+                    action: () => document.getElementById('services').scrollIntoView({ behavior: 'smooth' }),
+                    buttons: [{ text: "Anything else?", payload: "start" }]
+                },
+                'action_ebook': {
+                    message: "You got it. Taking you to the e-book section now. Just enter your email to get your free copy.",
+                    action: () => document.getElementById('ebook').scrollIntoView({ behavior: 'smooth' }),
+                    buttons: [{ text: "Anything else?", payload: "start" }]
+                }
+            };
 
-            const showInitialBotMessage = () => {
-                const initialMessage = `Hello! I'm Celeste, your Pariss United Business Advisor. 
-                <br><br>
-                I can help you understand your AI Business Score, which is like a financial cheat code for your company's future. A high score gives you an unfair advantage, while a low score means you're leaving money on the table for your competitors.
-                <br><br>
-                How can I help you explore this?`;
-                addBotMessage(initialMessage);
-            }
+            const startConversation = () => {
+                conversationState = 'start';
+                runConversation();
+            };
             
             updateProgressBar();
         });

@@ -78,6 +78,113 @@
         .btn-primary:hover {
             background-color: #1d4ed8;
         }
+        
+        /* --- AI Chatbot Styles --- */
+        #chatbot-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        #chatbot-toggle {
+            background-color: #0077cc;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 119, 204, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        #chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        #chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            max-width: 90vw;
+            height: 500px;
+            background-color: #000814;
+            border: 1px solid #003366;
+            border-radius: 1rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        #chat-window.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #chat-header {
+            background-color: #001f3f;
+            text-align: center;
+            position: relative;
+            flex-shrink: 0;
+            padding: 1rem;
+            border-radius: 1rem 1rem 0 0;
+            z-index: 10;
+        }
+
+        #chat-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .chat-message {
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            background-color: #003366;
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        #chat-reply-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem 0 1rem;
+            align-self: flex-start;
+        }
+        .reply-btn {
+            background-color: #005f99;
+            color: white;
+            border: 1px solid #0077cc;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .reply-btn:hover {
+            background-color: #0077cc;
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -152,20 +259,92 @@
         </div>
     </footer>
 
+    <div id="chatbot-container">
+        <div id="chat-window">
+            <div id="chat-header">
+                <h3 class="text-xl font-extrabold text-white">Celeste</h3>
+                <p class="text-sm text-gray-300 -mt-1">Your AI Business Advisor</p>
+            </div>
+            <div id="chat-messages"></div>
+        </div>
+        <div id="chatbot-toggle">
+            <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.184a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+            </svg>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Create a URLSearchParams object from the current URL
             const params = new URLSearchParams(window.location.search);
-            
-            // Get the 'email' parameter from the URL
             const email = params.get('email');
-            
             const emailElement = document.getElementById('customer-email');
 
-            // If an email is found in the URL and the element exists, update its text
             if (email && emailElement) {
                 emailElement.textContent = email;
             }
+
+            // --- Chatbot Logic for Thank You Page ---
+            const chatbotToggle = document.getElementById('chatbot-toggle');
+            const chatWindow = document.getElementById('chat-window');
+            const chatMessages = document.getElementById('chat-messages');
+
+            const addBotMessage = (message, buttons = []) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message bot-message';
+                messageDiv.innerHTML = message;
+                chatMessages.appendChild(messageDiv);
+
+                const existingButtons = document.getElementById('chat-reply-buttons');
+                if (existingButtons) existingButtons.remove();
+
+                if (buttons.length > 0) {
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.id = 'chat-reply-buttons';
+                    buttons.forEach(button => {
+                        const btn = document.createElement('button');
+                        btn.className = 'reply-btn';
+                        btn.textContent = button.text;
+                        btn.onclick = () => window.location.href = button.href;
+                        buttonContainer.appendChild(btn);
+                    });
+                    chatMessages.appendChild(buttonContainer);
+                }
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            const startOnboardingConversation = () => {
+                chatWindow.classList.add('open');
+                let step = 0;
+                const messages = [
+                    { text: "Congratulations again on your purchase!", delay: 500 },
+                    { text: "While our team prepares your detailed analysis, many new clients find it helpful to explore one of two paths next.", delay: 2000 },
+                    { 
+                        text: "Would you like to book your 1-on-1 consultation now, or would you prefer to take the free AI Score evaluation to get a baseline for your business?", 
+                        delay: 2500,
+                        buttons: [
+                            { text: "Book My Consultation", href: "contact.html"},
+                            { text: "Take the AI Score Quiz", href: "index.html#ai-app-section"}
+                        ]
+                    }
+                ];
+
+                const showNextMessage = () => {
+                    if (step < messages.length) {
+                        const current = messages[step];
+                        setTimeout(() => {
+                            addBotMessage(current.text, current.buttons);
+                            step++;
+                            showNextMessage();
+                        }, current.delay);
+                    }
+                };
+                showNextMessage();
+            };
+
+            // Automatically start the conversation 2 seconds after the page loads
+            setTimeout(startOnboardingConversation, 2000);
+
         });
     </script>
 </body>
