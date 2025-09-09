@@ -47,15 +47,17 @@
     </div>
 
 <script>
-    const ACCESS_PASSWORD = "ChangeMe123!"; // IMPORTANT: Use the same password as in app.html
+    const ACCESS_PASSWORD = "ChangeMe123!"; 
 
-    const loginScreen = document.getElementById('login-screen');
     const passwordInput = document.getElementById('password-input');
     const loginButton = document.getElementById('login-button');
     const loginError = document.getElementById('login-error');
 
     function handleLogin() {
         if (passwordInput.value === ACCESS_PASSWORD) {
+            // Save login status to session storage
+            sessionStorage.setItem('isLoggedIn', 'true');
+            // Redirect to the app
             window.location.href = 'app.html';
         } else {
             loginError.textContent = 'Incorrect password. Please try again.';
