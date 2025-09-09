@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Access | Pariss United - A.I. Credit Attorney</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1b2a;
+        }
+        .gold-text { color: #D4AF37; }
+        .gold-bg { background-color: #D4AF37; }
+        .app-input {
+            background-color: #0a0a0a;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+        }
+        .app-input:focus {
+            outline: none;
+            border-color: #D4AF37;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md text-center">
+            <a href="../index.html"><img src="https://raw.githubusercontent.com/ej1906/Pariss-united-website/main/Images/Pariss%20United%20Gold%20Logo.png" alt="Pariss United Logo" class="mx-auto h-20 mb-8"></a>
+            <h1 class="text-2xl font-bold gold-text mb-2">A.I. Credit Attorney App Access</h1>
+            <p class="text-gray-400 mb-6">Please enter the access password provided on your confirmation page.</p>
+            <div id="login-error" class="text-red-500 mb-4 h-5"></div>
+            <input type="password" id="password-input" class="app-input w-full p-3 rounded-lg mb-4 text-center" placeholder="••••••••••••">
+            <button id="login-button" class="cta-button w-full gold-bg text-black font-bold py-3 px-6 rounded-lg">
+                Unlock Application
+            </button>
+        </div>
+    </div>
+
+<script>
+    const ACCESS_PASSWORD = "ChangeMe123!"; // IMPORTANT: Use the same password as in app.html
+
+    const loginScreen = document.getElementById('login-screen');
+    const passwordInput = document.getElementById('password-input');
+    const loginButton = document.getElementById('login-button');
+    const loginError = document.getElementById('login-error');
+
+    function handleLogin() {
+        if (passwordInput.value === ACCESS_PASSWORD) {
+            window.location.href = 'app.html';
+        } else {
+            loginError.textContent = 'Incorrect password. Please try again.';
+            passwordInput.classList.add('border', 'border-red-500');
+        }
+    }
+
+    loginButton.addEventListener('click', handleLogin);
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleLogin();
+    });
+</script>
+</body>
+</html>

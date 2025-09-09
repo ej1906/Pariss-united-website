@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pariss United - A.I. Credit Attorney App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1b2a;
+        }
+        .gold-text { color: #D4AF37; }
+        .gold-bg { background-color: #D4AF37; }
+        .gold-border { border-color: #D4AF37; }
+        .app-input {
+            background-color: #0a0a0a;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            transition: border-color 0.3s;
+        }
+        .app-input:focus {
+            outline: none;
+            border-color: #D4AF37;
+        }
+        .tab-button {
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button.active {
+            border-bottom-color: #D4AF37;
+            color: #D4AF37;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 15px rgba(212, 175, 55, 0.2);
+        }
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 20px rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
+        <header class="text-center mb-12">
+             <a href="../index.html"><img src="https://raw.githubusercontent.com/ej1906/Pariss-united-website/main/Images/Pariss%20United%20Gold%20Logo.png" alt="Pariss United Logo" class="mx-auto h-16"></a>
+        </header>
+
+        <main>
+            <div class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-6 mb-10">
+                <h2 class="text-2xl font-bold gold-text mb-4">Step 1: Provide Your Credit Reports</h2>
+                <p class="text-gray-400 mb-6">I will now analyze your credit reports. Please copy the full text from each report and paste it into the correct tab below.</p>
+                
+                <div id="input-tabs-container" class="flex border-b border-gray-700 mb-4">
+                    <button class="tab-button active font-bold py-2 px-4" data-tab="equifax-input">Equifax</button>
+                    <button class="tab-button font-bold py-2 px-4" data-tab="experian-input">Experian</button>
+                    <button class="tab-button font-bold py-2 px-4" data-tab="transunion-input">TransUnion</button>
+                </div>
+
+                <div class="input-tab-content" id="equifax-input-content">
+                    <textarea class="app-input w-full h-64 rounded-lg p-3" placeholder="Paste your entire Equifax credit report text here..."></textarea>
+                </div>
+                <div class="input-tab-content hidden" id="experian-input-content">
+                    <textarea class="app-input w-full h-64 rounded-lg p-3" placeholder="Paste your entire Experian credit report text here..."></textarea>
+                </div>
+                <div class="input-tab-content hidden" id="transunion-input-content">
+                    <textarea class="app-input w-full h-64 rounded-lg p-3" placeholder="Paste your entire TransUnion credit report text here..."></textarea>
+                </div>
+                
+                <div class="text-center mt-6">
+                    <button id="generate-button" class="cta-button gold-bg text-black font-bold text-lg py-4 px-12 rounded-lg">
+                        Analyze Reports & Generate My Letters
+                    </button>
+                    <div id="loading-indicator" class="text-gold-text mt-4 h-5 hidden">Analyzing... Please wait.</div>
+                </div>
+            </div>
+
+            <div id="output-section" class="bg-[#0a0a0a] border border-gray-800 rounded-lg p-6 hidden">
+                <h2 class="text-2xl font-bold gold-text mb-4">Step 2: Your Dispute Letters & Action Plan</h2>
+                 <p class="text-gray-400 mb-6">My analysis is complete. Your three customized dispute letters and mailing instructions are ready below.</p>
+
+                <div id="output-tabs-container" class="flex border-b border-gray-700 mb-4">
+                    <button class="tab-button active font-bold py-2 px-4" data-tab="equifax-output">Letter for Equifax</button>
+                    <button class="tab-button font-bold py-2 px-4" data-tab="experian-output">Letter for Experian</button>
+                    <button class="tab-button font-bold py-2 px-4" data-tab="transunion-output">Letter for TransUnion</button>
+                    <button class="tab-button font-bold py-2 px-4" data-tab="action-plan-output">Your Action Plan</button>
+                </div>
+
+                <div class="output-tab-content" id="equifax-output-content">
+                     <button class="copy-button float-right bg-gray-700 hover:bg-gray-600 text-sm font-bold py-2 px-4 rounded-lg mb-4" data-target="equifax-letter-text">Copy Letter</button>
+                     <pre id="equifax-letter-text" class="whitespace-pre-wrap p-4 bg-black rounded-lg w-full text-gray-300 text-sm"></pre>
+                </div>
+                 <div class="output-tab-content hidden" id="experian-output-content">
+                     <button class="copy-button float-right bg-gray-700 hover:bg-gray-600 text-sm font-bold py-2 px-4 rounded-lg mb-4" data-target="experian-letter-text">Copy Letter</button>
+                     <pre id="experian-letter-text" class="whitespace-pre-wrap p-4 bg-black rounded-lg w-full text-gray-300 text-sm"></pre>
+                </div>
+                 <div class="output-tab-content hidden" id="transunion-output-content">
+                     <button class="copy-button float-right bg-gray-700 hover:bg-gray-600 text-sm font-bold py-2 px-4 rounded-lg mb-4" data-target="transunion-letter-text">Copy Letter</button>
+                     <pre id="transunion-letter-text" class="whitespace-pre-wrap p-4 bg-black rounded-lg w-full text-gray-300 text-sm"></pre>
+                </div>
+                  <div class="output-tab-content hidden" id="action-plan-output-content">
+                    <div class="p-4 bg-black rounded-lg text-gray-200">
+                         <h4 class="text-xl font-bold gold-text mb-4">Your Action Plan</h4>
+                        <p class="mb-4">Follow these instructions precisely to ensure your legal rights are protected.</p>
+                        <ul class="space-y-4">
+                            <li><strong>1. Review and Complete:</strong> Carefully read each letter. Fill in your personal information (Name, Address, DOB, SSN) at the top.</li>
+                            <li><strong>2. Print:</strong> Print each of the three letters on separate sheets of paper.</li>
+                            <li><strong>3. Sign:</strong> Physically sign your name in the space above your typed name on all three letters.</li>
+                            <li><strong>4. Prepare Enclosures:</strong> Make clear photocopies of your driver's license (or other state-issued ID) and a recent utility bill. Include a set of these copies with *each* letter.</li>
+                            <li><strong>5. Mail Separately:</strong> Take the three separate envelopes to a USPS Post Office. Send each letter using <strong>Certified Mail with Return Receipt Requested</strong>. This is non-negotiable and creates your legal paper trail.</li>
+                            <li><strong>6. Wait and Track:</strong> The bureaus have approximately 30 days to respond. Keep your certified mail receipts and the green return receipt cards when they arrive back in your mail.</li>
+                            <li><strong>7. Escalate if Necessary:</strong> If a bureau fails to respond or gives an inadequate response, immediately file a formal complaint against that bureau with the Consumer Financial Protection Bureau (CFPB) at <strong>www.consumerfinance.gov</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script>
+// --- CONFIGURATION ---
+const ACCESS_PASSWORD = "ChangeMe123!"; 
+// IMPORTANT: This password is a simple front-end gate.
+// For Phase 2, this must be replaced with a secure backend authentication system.
+
+// On page load, check if the user is "logged in" via session storage
+if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+    // If not logged in, redirect to the login page
+    window.location.href = 'login.html';
+}
+
+
+// --- TAB SWITCHING LOGIC ---
+function setupTabSystem(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            const tabName = e.target.dataset.tab;
+            container.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            
+            const parent = e.target.closest('.p-6'); 
+            parent.querySelectorAll('.input-tab-content, .output-tab-content').forEach(content => {
+                if (content.id === `${tabName}-content`) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
+        }
+    });
+}
+setupTabSystem('input-tabs-container');
+setupTabSystem('output-tabs-container');
+
+
+// --- CORE APPLICATION LOGIC ---
+const bureauInfo = {
+    equifax: { name: 'Equifax Information Services LLC', address: 'P.O. Box 740256\nAtlanta, GA 30374' },
+    experian: { name: 'Experian', address: 'P.O. Box 4500\nAllen, TX 75013' },
+    transunion: { name: 'TransUnion LLC Consumer Dispute Center', address: 'P.O. Box 2000\nChester, PA 19016' }
+};
+
+const disputeTemplates = {
+    collection: (creditor, account) => `1. Creditor: ${creditor}, Account #: ${account}\nThis alleged account is not recognized. Pursuant to the FCRA, I demand you provide the original verifiable documentation from the original creditor proving this debt is mine and that you are authorized to report it. If you cannot provide this proof within the 30-day investigation period, you must delete this item from my file immediately.`,
+    latePayment: (creditor, account) => `1. Creditor: ${creditor}, Account #: ${account}\nThe late payment reported is inaccurate. I demand a full investigation into the reported delinquency. Under 15 U.S.C. § 1681i(a)(1)(A), you are required to verify the accuracy of this information. Failure to do so requires its immediate removal.`,
+    chargeOff: (creditor, account) => `1. Creditor: ${creditor}, Account #: ${account}\nThis charge-off is inaccurate and incomplete. I demand a full investigation and validation of this item. If you cannot provide verifiable proof of its accuracy, you must delete this item immediately as per the FCRA.`,
+    inquiry: (creditor, date) => `1. Inquiry: ${creditor}, Date: ${date || 'Unknown'}\nThis inquiry was not authorized by me. I did not provide written consent for this company to access my credit report. This is a violation of the FCRA's permissible purpose clause (15 U.S.C. § 1681b). Please remove this unauthorized inquiry at once.`
+};
+
+const patterns = {
+    collection: /Collection Account[\s\S]*?(?:Creditor|Original Creditor):?\s*(.*?)\n[\s\S]*?Account(?: Number)?:?\s*([\w\d-]+)/gi,
+    latePayment: /\d+\s*Days Late[\s\S]*?(?:Creditor|Lender):?\s*(.*?)\n[\s\S]*?Account(?: Number)?:?\s*([\w\d-]+)/gi,
+    chargeOff: /Charge-Off[\s\S]*?(?:Creditor|Original Creditor):?\s*(.*?)\n[\s\S]*?Account(?: Number)?:?\s*([\w\d-]+)/gi,
+    inquiry: /Hard Inquiry[\s\S]*?(?:Company|Creditor):?\s*(.*?)\n[\s\S]*?Date(?: of Inquiry)?:?\s*([\d\/]+)/gi
+};
+
+function parseReport(text) {
+    const findings = { collection: [], latePayment: [], chargeOff: [], inquiry: [] };
+    if (!text) return findings;
+
+    for (const key in patterns) {
+        let match;
+        while ((match = patterns[key].exec(text)) !== null) {
+            findings[key].push({ creditor: match[1].trim(), account: match[2] ? match[2].trim() : null });
+        }
+    }
+    return findings;
+}
+
+function generateLetter(bureauKey, findings) {
+    const info = bureauInfo[bureauKey];
+    let disputeItems = [];
+    let itemCounter = 1;
+
+    for (const type in findings) {
+        findings[type].forEach(item => {
+            let disputeText = disputeTemplates[type](item.creditor, item.account);
+            disputeText = disputeText.replace(/^1\./, `${itemCounter}.`); // Renumber item
+            disputeItems.push(disputeText);
+            itemCounter++;
+        });
+    }
+
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    let letterBody = `[Your Full Name]
+[Your Street Address]
+[Your City, State, Zip Code]
+[Your Date of Birth]
+[Your Social Security Number]
+
+Date: ${today}
+
+VIA CERTIFIED MAIL - RETURN RECEIPT REQUESTED
+
+${info.name}
+${info.address}
+
+Subject: Formal Dispute and Demand for Investigation of My Credit File - [Your Full Name]
+
+To Whom It May Concern,
+
+I am writing to exercise my rights under the Fair Credit Reporting Act (FCRA), 15 U.S.C. § 1681 et seq. I am formally disputing the following inaccurate, unverifiable, and incomplete information currently appearing on my credit file. I have identified these items and demand a thorough investigation and immediate removal of any item that cannot be substantiated with verifiable proof.
+
+${disputeItems.length > 0 ? disputeItems.join('\n\n') : 'No specific items were automatically identified for dispute in the provided text. Please manually add items or review the report text for clarity.'}
+
+Under the FCRA, you have 30 days to investigate these disputes. I expect a written response detailing the outcome of your investigation for each disputed item and an updated copy of my credit report showing the corrections or deletions. Be advised that I am documenting this entire process, and a failure to resolve these disputes satisfactorily will result in a formal complaint being filed with the Consumer Financial Protection Bureau (CFPB) and I will pursue all available legal remedies.
+
+Sincerely,
+
+_________________________
+[Your Typed Full Name]
+
+Enclosures:
+Copy of my Driver’s License
+Copy of a recent Utility Bill (as proof of address)`;
+    
+    return letterBody;
+}
+
+const generateButton = document.getElementById('generate-button');
+const loadingIndicator = document.getElementById('loading-indicator');
+const outputSection = document.getElementById('output-section');
+
+generateButton.addEventListener('click', () => {
+    loadingIndicator.classList.remove('hidden');
+    generateButton.disabled = true;
+
+    // Simulate analysis time
+    setTimeout(() => {
+        const reports = {
+            equifax: document.querySelector('#equifax-input-content textarea').value,
+            experian: document.querySelector('#experian-input-content textarea').value,
+            transunion: document.querySelector('#transunion-input-content textarea').value,
+        };
+
+        const findings = {
+            equifax: parseReport(reports.equifax),
+            experian: parseReport(reports.experian),
+            transunion: parseReport(reports.transunion),
+        };
+
+        document.getElementById('equifax-letter-text').textContent = generateLetter('equifax', findings.equifax);
+        document.getElementById('experian-letter-text').textContent = generateLetter('experian', findings.experian);
+        document.getElementById('transunion-letter-text').textContent = generateLetter('transunion', findings.transunion);
+        
+        outputSection.classList.remove('hidden');
+        loadingIndicator.classList.add('hidden');
+        generateButton.disabled = false;
+        outputSection.scrollIntoView({ behavior: 'smooth' });
+    }, 1500); // 1.5 second delay
+});
+
+// --- UTILITY: COPY TO CLIPBOARD ---
+document.querySelectorAll('.copy-button').forEach(button => {
+    button.addEventListener('click', (e) => {
+        const targetId = e.target.dataset.target;
+        const textToCopy = document.getElementById(targetId).textContent;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = e.target.textContent;
+            e.target.textContent = 'Copied!';
+            setTimeout(() => {
+                e.target.textContent = originalText;
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            alert('Failed to copy text.');
+        });
+    });
+});
+</script>
+</body>
+</html>
