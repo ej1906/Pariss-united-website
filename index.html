@@ -463,26 +463,39 @@
                                     <p id="form-error-msg" class="text-red-500 text-sm" style="display: none;">Please fill out all required fields marked with *</p>
                                 </div>
                                 <div class="mt-6 text-center">
-                                    <button type="submit" class="btn btn-primary text-lg">Calculate My AI Score!</button>
+                                    <button type="submit" class="btn btn-primary text-lg">Start Evaluation</button>
                                 </div>
                             </form>
                         </div>
 
                         <div id="step-2" class="step">
                             <div class="text-center mb-8">
-                                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Business Evaluation</h2>
-                                <p class="text-gray-600 mt-2">These answers determine your AI Business Score. Be honest.</p>
+                                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Step 2: Business Evaluation</h2>
+                                <p class="text-gray-600 mt-2">These answers help determine your AI Score. Be honest.</p>
                             </div>
                             <form id="quiz-form">
                                 <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">1. What is your primary industry?</label><select id="q1" class="form-input"><option value="ecommerce">E-commerce / Retail</option><option value="service">Service-Based (Consulting, Agency, etc.)</option><option value="saas">SaaS / Technology</option><option value="manufacturing">Manufacturing / Logistics</option><option value="other">Other</option></select></div>
                                 <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">2. How do you currently attract most of your customers?</label><select id="q2" class="form-input"><option value="digital_marketing">Digital Marketing (SEO, Ads, Social Media)</option><option value="sales_team">Direct Sales Team</option><option value="referrals">Word of Mouth / Referrals</option><option value="content">Content Marketing / Inbound</option></select></div>
                                 <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">3. What is your biggest challenge right now?</label><select id="q3" class="form-input"><option value="lead_generation">Generating enough high-quality leads</option><option value="conversion">Converting leads into customers</option><option value="efficiency">Operational efficiency and costs</option><option value="customer_support">Customer support and retention</option></select></div>
                                 <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">4. How familiar are you with using AI tools in your business?</label><select id="q4" class="form-input"><option value="not_familiar">Not familiar at all</option><option value="somewhat_familiar">Somewhat familiar, used basic tools</option><option value="very_familiar">Very familiar, actively using AI</option></select></div>
-                                <div class="mt-8 flex justify-between"><button type="button" id="back-to-step1-btn" class="btn btn-secondary">Back</button><button type="button" id="generate-roadmap-btn" class="btn btn-primary">See My Score & Roadmap</button></div>
+                                <div class="mt-8 flex justify-between"><button type="button" id="back-to-step1-btn" class="btn btn-secondary">Back</button><button type="button" id="go-to-step3-btn" class="btn btn-primary">Continue</button></div>
+                            </form>
+                        </div>
+                        
+                        <div id="step-3" class="step">
+                            <div class="text-center mb-8">
+                                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Step 3: Final Details</h2>
+                                <p class="text-gray-600 mt-2">Just a few final questions to help us understand your goals.</p>
+                            </div>
+                            <form id="lead-scoring-form">
+                                <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">1. Looking at the next 6-12 months, what is your primary growth goal?</label><select id="q_ambition" class="form-input"><option value="revenue">Significantly increase revenue and market share</option><option value="profit">Streamline operations to improve profitability</option><option value="defining">I'm still defining my goals for the next year</option></select></div>
+                                <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">2. How urgently do you need to solve the biggest challenge you mentioned earlier?</label><select id="q_urgency" class="form-input"><option value="critical">Critically urgent. It's a top priority holding my business back right now.</option><option value="significant">It's a significant issue I need to solve in the near future.</option><option value="research">I'm exploring potential solutions, but there's no immediate rush.</option></select></div>
+                                <div class="mb-6"><label class="block text-lg font-semibold text-gray-700 mb-2">3. What is your role in the decision-making process for new tools and services?</label><select id="q_authority" class="form-input"><option value="decision_maker">I am the final decision-maker.</option><option value="influencer">I am a primary influencer and advisor.</option><option value="researcher">I am gathering research for my team.</option></select></div>
+                                <div class="mt-8 flex justify-between"><button type="button" id="back-to-step2-btn" class="btn btn-secondary">Back</button><button type="button" id="generate-roadmap-btn" class="btn btn-primary">See My Score & Roadmap</button></div>
                             </form>
                         </div>
 
-                        <div id="step-3" class="step">
+                        <div id="step-4" class="step">
                             <div class="text-center mb-10">
                                 <h2 class="text-2xl font-bold text-gray-900 mb-4">Your AI Business Score is:</h2>
                                 <p id="score-text" class="text-7xl font-extrabold text-gray-900">0</p>
@@ -515,12 +528,12 @@
                                 <button type="button" id="lead-the-pack-btn" class="btn btn-primary text-lg animate-pulse">I'm Ready To Lead The Pack!</button>
                             </div>
                             <div class="mt-8 flex justify-between items-center">
-                                <button type="button" id="back-to-step2-btn" class="btn btn-secondary">Back to Questions</button>
-                                <button type="button" id="no-thanks-step3-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No thanks, I'll figure it out myself</button>
+                                <button type="button" id="back-to-step3-btn" class="btn btn-secondary">Back to Questions</button>
+                                <button type="button" id="no-thanks-step4-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No thanks, I'll figure it out myself</button>
                             </div>
                         </div>
 
-                        <div id="step-4" class="step">
+                        <div id="step-5" class="step">
                             <div class="text-center">
                                 <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">"Yes! I Want The Unfair Advantage!"</h1>
                                 <p class="mt-4 text-xl text-gray-600">Get The Complete, Done-For-You AI Integration Strategy & Market Analysis</p>
@@ -549,11 +562,11 @@
                                 </div>
                             </div>
                             <div class="mt-8 text-center">
-                                <button type="button" id="no-thanks-step4-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No thanks, I'll figure it out myself</button>
+                                <button type="button" id="no-thanks-step5-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No thanks, I'll figure it out myself</button>
                             </div>
                         </div>
 
-                        <div id="step-5" class="step">
+                        <div id="step-6" class="step">
                             <div class="text-center">
                                 <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">Wait! One Last Thing...</h1>
                                 <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">I get it. A $399 investment can feel like a big leap, even when the potential return is massive. But I saw your AI score, and I truly believe your business is on the verge of a breakthrough.</p>
@@ -568,11 +581,11 @@
                                 </div>
                             </div>
                             <div class="mt-8 text-center">
-                                <button type="button" id="no-thanks-step5-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No, I'm still not interested</button>
+                                <button type="button" id="no-thanks-step6-btn" class="text-gray-500 hover:text-gray-800 font-semibold">No, I'm still not interested</button>
                             </div>
                         </div>
-
-                        <div id="step-6" class="step">
+                        
+                        <div id="step-7" class="step">
                             <div class="text-center">
                                 <svg class="mx-auto h-16 w-16 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.002-.018.002-.006.001c-.004.001-.007.001-.011.001H4.25l-.006-.001-.018-.002-.07-.002a49.96 49.96 0 00-2.265-2.43m15.482 0l.07.002.018.002.006.001c.004.001.007.001.011.001h.012l.006-.001.018-.002.07-.002a49.96 49.96 0 012.265-2.43m-15.482 0l-.07.002a50.014 50.014 0 01-2.265 2.43" />
@@ -772,7 +785,7 @@
                 <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
                 <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
             </div>
-            <p class="mb-2">&copy; 2025 Pariss United LLC. All Rights Reserved.</p>
+            <p class="mb-2">&copy; 2024 Pariss United LLC. All Rights Reserved.</p>
             <p>Email: <a href="mailto:info@parissunited.com" class="text-[#0099ff] hover:underline">info@parissunited.com</a></p>
         </div>
     </footer>
@@ -827,7 +840,7 @@
 
             // --- Main Application Logic ---
             let currentStep = 1;
-            const totalSteps = 4;
+            const totalSteps = 5; // Updated total steps
             let userData = {};
             let countdownInterval;
 
@@ -848,21 +861,19 @@
                 }
                 const progressBarContainer = document.getElementById('progress-bar-container');
                 if(progressBarContainer){
-                     progressBarContainer.style.display = (currentStep > 1 && currentStep < 4) ? 'block' : 'none';
+                     progressBarContainer.style.display = (currentStep > 1 && currentStep < 5) ? 'block' : 'none';
                 }
             }
             
             function nextStep(step) {
-                const progressBarContainer = document.getElementById('progress-bar-container');
-                if (step >= 4 && progressBarContainer) {
-                    progressBarContainer.style.display = 'none';
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                const nextStepEl = document.getElementById(`step-${step}`);
+                if (nextStepEl) {
+                    nextStepEl.classList.add('active');
+                    currentStep = step;
                 }
 
-                document.querySelector(`.step.active`)?.classList.remove('active');
-                document.getElementById(`step-${step}`)?.classList.add('active');
-                currentStep = step;
-
-                if (step === 4) startCountdown();
+                if (currentStep === 5) startCountdown();
                 else stopCountdown();
 
                 updateProgressBar();
@@ -870,11 +881,12 @@
             }
 
             function prevStep(step) {
-                document.querySelector('.step.active')?.classList.remove('active');
-                document.getElementById(`step-${step}`)?.classList.add('active');
-                currentStep = step;
-
-                if (step !== 4) stopCountdown();
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                const prevStepEl = document.getElementById(`step-${step}`);
+                if (prevStepEl) {
+                    prevStepEl.classList.add('active');
+                    currentStep = step;
+                }
                 updateProgressBar();
                 window.scrollTo({ top: document.getElementById('ai-app-section').offsetTop, behavior: 'smooth' });
             }
@@ -892,11 +904,11 @@
                     const hours = Math.floor(time / 3600);
                     const minutes = Math.floor((time % 3600) / 60);
                     const seconds = time % 60;
-                    countdownElement.textContent = `Offer Ends In: ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+                    countdownElement.textContent = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
                     time--;
                     if (time < 0) {
                         clearInterval(countdownInterval);
-                        countdownElement.textContent = "Offer Expired!";
+                        countdownElement.textContent = "OFFER EXPIRED";
                         document.getElementById('buy-btn-1').disabled = true;
                         document.getElementById('buy-btn-1').classList.add('opacity-50', 'cursor-not-allowed');
                     }
@@ -978,7 +990,7 @@
                     website: document.getElementById('website').value,
                     businessDescription: document.getElementById('businessDescription').value,
                 };
-                console.log("User data captured (not saved):", userData);
+                
                 nextStep(2);
             }
 
@@ -1003,27 +1015,23 @@
                     card.innerHTML = `<h4 class="font-bold text-lg text-gray-800">${reco.title}</h4><p class="text-gray-600 mt-2 text-sm">${reco.description}</p>`;
                     resultsContainer.appendChild(card);
                 });
-                nextStep(3);
+                nextStep(4);
             }
             
-            function processPurchase(url) {
-                // Now directly navigates to the provided URL
-                window.location.href = url;
-            }
-
             // --- Event Listener Setup ---
-            document.getElementById('user-info-form')?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                validateAndGoToStep2();
-            });
-            document.getElementById('back-to-step1-btn')?.addEventListener('click', () => prevStep(1));
+            document.getElementById('user-info-form')?.addEventListener('submit', (e) => { e.preventDefault(); validateAndGoToStep2(); });
+            document.getElementById('go-to-step3-btn')?.addEventListener('click', () => nextStep(3));
             document.getElementById('generate-roadmap-btn')?.addEventListener('click', generateEvaluation);
-            document.getElementById('lead-the-pack-btn')?.addEventListener('click', () => nextStep(4));
+            document.getElementById('lead-the-pack-btn')?.addEventListener('click', () => nextStep(5));
+            
+            document.getElementById('back-to-step1-btn')?.addEventListener('click', () => prevStep(1));
             document.getElementById('back-to-step2-btn')?.addEventListener('click', () => prevStep(2));
-            document.getElementById('no-thanks-step3-btn')?.addEventListener('click', () => nextStep(5));
-            // Removed button event listeners for purchase buttons as they are now direct links
-            document.getElementById('no-thanks-step4-btn')?.addEventListener('click', () => nextStep(5));
+            document.getElementById('back-to-step3-btn')?.addEventListener('click', () => prevStep(3));
+
+            document.getElementById('no-thanks-step4-btn')?.addEventListener('click', () => nextStep(6));
             document.getElementById('no-thanks-step5-btn')?.addEventListener('click', () => nextStep(6));
+            document.getElementById('no-thanks-step6-btn')?.addEventListener('click', () => nextStep(7));
+
 
             // --- Chatbot Logic ---
             const chatbotToggle = document.getElementById('chatbot-toggle');
