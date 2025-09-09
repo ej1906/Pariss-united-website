@@ -542,7 +542,7 @@
                                         <p class="text-lg font-semibold text-blue-800">LIMITED TIME OFFER</p>
                                         <p class="text-6xl font-extrabold text-gray-900 my-2"><span class="text-4xl text-gray-500 line-through">$798</span> $399</p>
                                         <p class="text-gray-800 font-bold">50% OFF - TODAY ONLY!</p>
-                                        <button id="buy-btn-1" class="mt-6 w-full btn btn-primary text-xl block">Claim My 50% Discount Now!</button>
+                                        <a href="https://a793561c-5d7c-4eda-9344-45edde3c6b17.paylinks.godaddy.com/f3e7f2bb-468b-413e-92f7-3a5" id="buy-btn-1" class="mt-6 w-full btn btn-primary text-xl block">Claim My 50% Discount Now!</a>
                                         <p class="text-xs text-gray-500 mt-2">Secure 128-bit SSL encrypted payment.</p>
                                         <div id="countdown" class="mt-4 text-lg font-bold text-red-500"></div>
                                     </div>
@@ -564,7 +564,7 @@
                                     <h3 class="text-2xl font-bold text-gray-800">Final Chance: Take an Extra $50 Off</h3>
                                     <p class="text-6xl font-extrabold text-gray-900 my-4"><span class="text-4xl text-gray-500 line-through">$399</span> $349</p>
                                     <p class="text-gray-600 mb-6">Get the complete package for just $349. This offer is not available anywhere else and will disappear once you leave this page.</p>
-                                    <button id="buy-btn-2" class="btn btn-primary text-xl">Yes! I'll Take The $50 Discount!</button>
+                                    <a href="https://a793561c-5d7c-4eda-9344-45edde3c6b17.paylinks.godaddy.com/f97f5af4-911a-43ab-9c00-a48" id="buy-btn-2" class="btn btn-primary text-xl">Yes! I'll Take The $50 Discount!</a>
                                 </div>
                             </div>
                             <div class="mt-8 text-center">
@@ -648,8 +648,17 @@
                 </div>
             </div>
         </section>
+        
+        <section id="credit-repair-promo" class="py-20 bg-black">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="text-2xl font-bold text-gray-400">Another Service from Pariss United</h2>
+                 <h3 class="text-4xl font-extrabold text-white mt-2">Reclaim Your Financial Freedom with the <span class="text-[#D4AF37]">A.I. Credit Attorney</span></h3>
+                 <p class="text-gray-400 mt-4 max-w-3xl mx-auto">Are inaccurate or unverified negative items on your credit report holding you back? Our new AI-powered tool gives you the legal firepower to challenge the bureaus and force them to delete items for good.</p>
+                 <a href="credit-offer/index.html" class="btn btn-primary text-xl mt-8">Learn More & Get Started</a>
+            </div>
+        </section>
 
-        <section id="about" class="py-20 bg-black">
+        <section id="about" class="py-20 bg-[#000814]">
             <div class="container mx-auto px-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <div>
@@ -681,7 +690,7 @@
             </div>
         </section>
 
-        <section id="testimonials" class="py-20 bg-[#000814]">
+        <section id="testimonials" class="py-20 bg-black">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold text-white">Trusted by Industry Leaders</h2>
@@ -758,6 +767,11 @@
 
     <footer class="bg-[#000814] border-t border-[#003366]">
         <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="credit-offer/index.html" class="hover:text-white transition">AI Credit Repair</a>
+                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+            </div>
             <p class="mb-2">&copy; 2025 Pariss United LLC. All Rights Reserved.</p>
             <p>Email: <a href="mailto:info@parissunited.com" class="text-[#0099ff] hover:underline">info@parissunited.com</a></p>
         </div>
@@ -992,9 +1006,9 @@
                 nextStep(3);
             }
             
-            function processPurchase() {
-                const email = encodeURIComponent(userData.email);
-                window.location.href = `thank-you.html?email=${email}`;
+            function processPurchase(url) {
+                // Now directly navigates to the provided URL
+                window.location.href = url;
             }
 
             // --- Event Listener Setup ---
@@ -1007,9 +1021,8 @@
             document.getElementById('lead-the-pack-btn')?.addEventListener('click', () => nextStep(4));
             document.getElementById('back-to-step2-btn')?.addEventListener('click', () => prevStep(2));
             document.getElementById('no-thanks-step3-btn')?.addEventListener('click', () => nextStep(5));
-            document.getElementById('buy-btn-1')?.addEventListener('click', processPurchase);
+            // Removed button event listeners for purchase buttons as they are now direct links
             document.getElementById('no-thanks-step4-btn')?.addEventListener('click', () => nextStep(5));
-            document.getElementById('buy-btn-2')?.addEventListener('click', processPurchase);
             document.getElementById('no-thanks-step5-btn')?.addEventListener('click', () => nextStep(6));
 
             // --- Chatbot Logic ---
@@ -1034,13 +1047,11 @@
                 messageDiv.innerHTML = message;
                 chatMessages.appendChild(messageDiv);
 
-                // Remove existing buttons
                 const existingButtons = document.getElementById('chat-reply-buttons');
                 if (existingButtons) {
                     existingButtons.remove();
                 }
 
-                // Add new buttons if any
                 if (buttons.length > 0) {
                     const buttonContainer = document.createElement('div');
                     buttonContainer.id = 'chat-reply-buttons';
@@ -1067,11 +1078,9 @@
             };
             
             const handleReply = (payload) => {
-                // Find the button text and add it as a user message
                 const buttonText = conversationTree[conversationState].buttons.find(b => b.payload === payload).text;
                 addUserMessage(buttonText);
                 
-                // Remove buttons after click
                 const existingButtons = document.getElementById('chat-reply-buttons');
                 if (existingButtons) {
                     existingButtons.remove();
